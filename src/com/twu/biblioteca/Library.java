@@ -5,15 +5,20 @@ import java.util.ArrayList;
 
 public class Library {
 
-    private ArrayList<Book> bookList;
+//    private ArrayList<Book> bookList;
 
-    public Library(ArrayList<Book> bookList) {
-        this.bookList = bookList;
+    public Library() {
+//        this.bookList = bookList;
     }
 
-    public ArrayList<Book> getBookList() {
-        bookList.add(new Book("Jane Eyre"));
-        return bookList;
+//    public ArrayList<Book> getBookList() {
+//        bookList.add(new Book("1984"));
+//        return bookList;
+//    }
+
+    public Book getBook() {
+        Book janeEyre = new Book("Jane Eyre");
+        return janeEyre;
     }
 
 }
