@@ -15,9 +15,14 @@ public class BookTest {
 //        then
         assertThat(title, is("Jane Eyre"));
     }
-//    given
 
-//    when
-//    then
-
+    @Test
+    public void shouldReturnTitle1984WhenConstructedWith1984() {
+        //        given
+        Book janeEyre = new Book("1984");
+//        when
+        String title = janeEyre.getTitle();
+//        then
+        assertThat(title, is("1984"));
+    }
 }
