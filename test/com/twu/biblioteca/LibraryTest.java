@@ -11,21 +11,21 @@ import static org.junit.Assert.*;
 
 public class LibraryTest {
 
-//    set up method
 
-    @Test
-    public void shouldReturnBookJaneEyreFromLibraryWhenLibraryOnlyHasOneBook() {
-        Library lib = new Library();
-//      when
-        Book actualBook = lib.getBook();
-//      then
-        assertThat(actualBook.getTitle(), is("Jane Eyre"));
-    }
-
-    @Test
-    public void shouldPrintBookTitleWhenIStartTheApp() {
-
-    }
+//    @Test
+//    public void shouldReturnBookJaneEyreFromLibraryWhenLibraryOnlyHasOneBook() {
+//        Library lib = new Library();
+////      when
+//        Book actualBook = lib.getBook();
+////      then
+//        assertThat(actualBook.getTitle(), is("Jane Eyre"));
+//    }
+//
+//    @Test
+//    public void shouldPrintBookTitleWhenIStartTheApp() {
+//
+//    }
+//
 
 //    @Test
 //    public void shouldReturnLibraryWithOneBookTitledJaneEyreWhenGetBookListReturnsLibraryWithOneBookTitledJaneEyre() {

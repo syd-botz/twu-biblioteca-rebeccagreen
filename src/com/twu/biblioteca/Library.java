@@ -1,24 +1,21 @@
 package com.twu.biblioteca;
 
+import java.awt.print.Printable;
+import java.io.PrintStream;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Library {
 
-//    private ArrayList<Book> bookList;
+    private PrintStream printStream;
 
-    public Library() {
-//        this.bookList = bookList;
+    public Library(PrintStream printStream) {
+        this.printStream = printStream;
     }
 
-//    public ArrayList<Book> getBookList() {
-//        bookList.add(new Book("1984"));
-//        return bookList;
-//    }
-
-    public Book getBook() {
-        Book janeEyre = new Book("Jane Eyre");
-        return janeEyre;
+    public void showWelcomeMessage(){
+        printStream.print("welcome");
     }
+
 
 }
