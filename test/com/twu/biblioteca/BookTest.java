@@ -7,7 +7,7 @@ import static org.junit.Assert.*;
 
 public class BookTest {
     @Test
-    public void bookConstructorTest() {
+    public void shouldReturnJaneEyreWhenGetTitleReturnsJaneEyre() {
 //        given
         Book janeEyre = new Book("Jane Eyre");
 //        when
