@@ -18,43 +18,45 @@ public class BibliotecaAppTest {
     private ByteArrayOutputStream outputStream;
     private PrintStream out;
     private Library lib;
+    private BufferedReader reader;
 
     @Before
-    public void setUp() {
-//      outputStream = new ByteArrayOutputStream();
-//      out = new PrintStream(outputStream);
-//      BibliotecaApp app = new BibliotecaApp(outputStream);
-//
-//      ArrayList<Book> bookList = new ArrayList<Book>();
-//
-//      bookList.add(new Book("1984", "George Orwell", "2010"));
-//      bookList.add(new Book("Beloved", "Toni Morrison", "2005"));
+    public void setUp() throws IOException {
 
       ArrayList<Book> bookList = new ArrayList<Book>();
 
       bookList.add(new Book("1984", "George Orwell", "2010"));
       bookList.add(new Book("Beloved", "Toni Morrison", "2005"));
 
+//    reader = new BufferedReader(new InputStreamReader(System.in));
+      reader = mock(BufferedReader.class);
       outputStream = new ByteArrayOutputStream();
       out = new PrintStream(outputStream);
       lib = new Library(out, bookList);
 
-      BibliotecaApp app = new BibliotecaApp(lib, outputStream, out);
-      app.start();
+
+        when(reader.readLine()).thenReturn("1");
+        BibliotecaApp app = new BibliotecaApp(lib, outputStream, out, reader);
+       app.start();
     }
 
     @Test
-    public void shouldSeeWelcomeMessageWhenAppStarts() {
+    public void shouldSeeWelcomeMessageWhenAppStarts() throws IOException {
+        //BibliotecaApp app = new BibliotecaApp(lib, outputStream, out, reader);
+        //app.start();
         assertThat(outputStream.toString(), containsString("welcome to rebecca and syd's library!"));
     }
 
-//    @Test
-//    public void mock_shouldAppStartTriggerLibraryDisplayWelcomeMessage(){
-//
-//    }
+    @Test
+    public void mock_shouldAppStartTriggerLibraryDisplayWelcomeMessage() throws IOException {
+        Library mockLibrary = mock(Library.class);
+        BibliotecaApp app = new BibliotecaApp(mockLibrary, outputStream, out, reader);
+        app.start();
+        verify(mockLibrary).showWelcomeMessage();
+    }
 
     @Test
-    public void mock_shouldSeeIfStartIsCalled() {
+    public void mock_shouldSeeIfStartIsCalled() throws IOException {
         BibliotecaApp mockApp = mock(BibliotecaApp.class);
 
         mockApp.start();
@@ -69,18 +71,12 @@ public class BibliotecaAppTest {
         assertThat(output[4], containsString("1984"));
     }
 
-//    @Test
-//    public void shouldCallPrintBooklistAfterWelcomeMessageDisplays(){
-//        Library mockLibrary = mock(Library.class);
-//        verify(mockLibrary, atLeast(1)).printBooklist();
-//    }
 
     @Test
     public void shouldPrintTwoBooksAfterWelcomeMessage(){
-
-//        String[] output = outputStream.toString().split("\n");
-//        assertThat(output[1], containsString("1984"));
-//        assertThat(output[2], containsString("Beloved"));
+        String[] output = outputStream.toString().split("\n");
+        assertThat(output[4], containsString("1984"));
+        assertThat(output[5], containsString("Beloved"));
     }
 
     @Test
@@ -126,4 +122,18 @@ public class BibliotecaAppTest {
 ////        then the library should display the book list
 ////        so we want to check to see if library calls displaybooklist
 //    }
+
+    @Test
+    public void shouldDisplayWhen1IsSelectedFromOptions() throws IOException {
+        BufferedReader bufferedReader = mock(BufferedReader.class);
+        PrintStream mockPrintStream = mock(PrintStream.class);
+        OutputStream mockOutputStream = mock(OutputStream.class);
+        Library mockLibrary = mock(Library.class);
+        BibliotecaApp mockApp = new BibliotecaApp(mockLibrary, mockOutputStream, mockPrintStream, bufferedReader);
+
+        when(bufferedReader.readLine()).thenReturn("1");
+
+        mockApp.start();
+        verify(mockLibrary).printBooklist();
+    }
 }
