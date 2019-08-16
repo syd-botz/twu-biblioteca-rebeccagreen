@@ -3,6 +3,9 @@ package com.twu.biblioteca;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BibliotecaApp {
 
@@ -14,11 +17,24 @@ public class BibliotecaApp {
 
     public static void main(String[] args) {
         BibliotecaApp app = new BibliotecaApp(System.out);
-        String[] bookList = {"1984", "Beloved", "House of the Spirits", "How to Do Nothing", "Blah"};
+
+        ArrayList<Map<String, String>> bookList = new ArrayList();
+        Map<String, String> book1 = new HashMap<String, String>();
+        Map<String, String> book2 = new HashMap<String, String>();
+
+
+        book1.put("title", "1984");
+        book1.put("author", "George Orwell");
+        book2.put("title", "Beloved");
+        book2.put("author", "Toni Morrison");
+
+        bookList.add(book1);
+        bookList.add(book2);
+
         app.start(bookList);
     }
 
-    public void start(String[] bookList){
+    public void start(ArrayList<Map<String, String>> bookList){
         Library library = new Library(new PrintStream(outputStream), bookList);
         library.showWelcomeMessage();
         library.printBook();

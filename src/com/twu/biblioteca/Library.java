@@ -3,14 +3,14 @@ package com.twu.biblioteca;
 import java.awt.print.Printable;
 import java.io.PrintStream;
 import java.lang.reflect.Array;
-import java.util.ArrayList;
+import java.util.*;
 
 public class Library {
 
     private PrintStream printStream;
-    private String[] bookList;
+    private ArrayList<Map<String, String>> bookList;
 
-    public Library(PrintStream printStream, String[] bookList) {
+    public Library(PrintStream printStream, ArrayList<Map<String, String>> bookList) {
 
         this.printStream = printStream;
         this.bookList = bookList;
@@ -22,11 +22,9 @@ public class Library {
     }
 
     public void printBook(){
-        for (String book : bookList){
-            printStream.println(book);
+        for (Map<String, String> book : bookList){
+            printStream.println(book.get("title") + " " + book.get("author"));
         }
-//        printStream.println("1984");
-//        printStream.println("Beloved");
     }
 
 
