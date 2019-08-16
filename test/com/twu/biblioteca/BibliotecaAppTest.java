@@ -33,8 +33,10 @@ public class BibliotecaAppTest {
 
       book1.put("title", "1984");
       book1.put("author", "George Orwell");
+      book1.put("year", "2010");
       book2.put("title", "Beloved");
       book2.put("author", "Toni Morrison");
+      book2.put("year", "2005");
 
       bookList.add(book1);
       bookList.add(book2);
@@ -73,4 +75,9 @@ public class BibliotecaAppTest {
         assertThat(output[1], containsString("George Orwell"));
     }
 
+    @Test
+    public void shouldPrintYearWhenListingBookTitleInBookList(){
+        String[] output = outputStream.toString().split("\n");
+        assertThat(output[1], containsString("2010"));
+    }
 }

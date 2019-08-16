@@ -23,7 +23,7 @@ public class Library {
 
     public void printBook(){
         for (Map<String, String> book : bookList){
-            printStream.println(book.get("title") + " " + book.get("author"));
+            printStream.println(book.get("title") + " " + book.get("author") + " in " + book.get("year"));
         }
     }
 
