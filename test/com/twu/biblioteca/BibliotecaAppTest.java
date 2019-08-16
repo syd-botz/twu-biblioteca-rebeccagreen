@@ -3,17 +3,16 @@ package com.twu.biblioteca;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 public class BibliotecaAppTest {
     private ByteArrayOutputStream outputStream;
@@ -22,26 +21,26 @@ public class BibliotecaAppTest {
 
     @Before
     public void setUp() {
+//      outputStream = new ByteArrayOutputStream();
+//      out = new PrintStream(outputStream);
+//      BibliotecaApp app = new BibliotecaApp(outputStream);
+//
+//      ArrayList<Book> bookList = new ArrayList<Book>();
+//
+//      bookList.add(new Book("1984", "George Orwell", "2010"));
+//      bookList.add(new Book("Beloved", "Toni Morrison", "2005"));
+
+      ArrayList<Book> bookList = new ArrayList<Book>();
+
+      bookList.add(new Book("1984", "George Orwell", "2010"));
+      bookList.add(new Book("Beloved", "Toni Morrison", "2005"));
+
       outputStream = new ByteArrayOutputStream();
       out = new PrintStream(outputStream);
-      BibliotecaApp app = new BibliotecaApp(outputStream);
+      lib = new Library(out, bookList);
 
-      ArrayList<Map<String, String>> bookList = new ArrayList();
-      Map<String, String> book1 = new HashMap<String, String>();
-      Map<String, String> book2 = new HashMap<String, String>();
-
-
-      book1.put("title", "1984");
-      book1.put("author", "George Orwell");
-      book1.put("year", "2010");
-      book2.put("title", "Beloved");
-      book2.put("author", "Toni Morrison");
-      book2.put("year", "2005");
-
-      bookList.add(book1);
-      bookList.add(book2);
-
-      app.start(bookList);
+      BibliotecaApp app = new BibliotecaApp(lib, outputStream, out);
+      app.start();
     }
 
     @Test
@@ -49,35 +48,82 @@ public class BibliotecaAppTest {
         assertThat(outputStream.toString(), containsString("welcome to rebecca and syd's library!"));
     }
 
+//    @Test
+//    public void mock_shouldAppStartTriggerLibraryDisplayWelcomeMessage(){
+//
+//    }
+
+    @Test
+    public void mock_shouldSeeIfStartIsCalled() {
+        BibliotecaApp mockApp = mock(BibliotecaApp.class);
+
+        mockApp.start();
+
+        verify(mockApp).start();
+    }
+
+
     @Test
     public void shouldSee1984AfterWelcomeMessage() throws IOException {
         String[] output = outputStream.toString().split("\n");
-        assertThat(output[1], containsString("1984"));
+        assertThat(output[4], containsString("1984"));
     }
+
+//    @Test
+//    public void shouldCallPrintBooklistAfterWelcomeMessageDisplays(){
+//        Library mockLibrary = mock(Library.class);
+//        verify(mockLibrary, atLeast(1)).printBooklist();
+//    }
 
     @Test
     public void shouldPrintTwoBooksAfterWelcomeMessage(){
-        String[] output = outputStream.toString().split("\n");
-        assertThat(output[1], containsString("1984"));
-        assertThat(output[2], containsString("Beloved"));
+
+//        String[] output = outputStream.toString().split("\n");
+//        assertThat(output[1], containsString("1984"));
+//        assertThat(output[2], containsString("Beloved"));
     }
 
     @Test
     public void shouldPrintNumberOfBooksInBookList(){
         String[] output = outputStream.toString().split("\n");
-        Integer numOfBooks = output.length-1;
+        Integer numOfBooks = output.length-4;
         assertThat(numOfBooks, is(2));
     }
 
     @Test
     public void shouldPrintAuthorWhenListingBookTitleInBookList(){
         String[] output = outputStream.toString().split("\n");
-        assertThat(output[1], containsString("George Orwell"));
+        assertThat(output[4], containsString("George Orwell"));
     }
 
     @Test
     public void shouldPrintYearWhenListingBookTitleInBookList(){
         String[] output = outputStream.toString().split("\n");
-        assertThat(output[1], containsString("2010"));
+        assertThat(output[4], containsString("2010"));
     }
+
+    @Test
+    public void shouldDisplayOptionsAfterWelcomeMessage(){
+        String[] output = outputStream.toString().split("\n");
+        assertThat(output[1], is("Options"));
+        assertThat(output[2], is("1 - List of Books"));
+        assertThat(output[3], is("Please Enter the Number of Your Choice Here: "));
+    }
+
+//    @Test
+//    public void shouldSeeListOfBooksWhen1IsSelected() throws IOException {
+////        user input gather from scanner is 1
+////        Scanner scanner = new Scanner(System.in);
+////        String userInput = scanner.nextLine();
+//
+//        BufferedReader bufferedReader = mock(BufferedReader.class);
+//        when(bufferedReader.readLine()).thenReturn("1");
+//
+//        verify(bufferedReader)
+//
+////        set up scanner wrapper to always choose 1
+//
+////        then the library should display the book list
+////        so we want to check to see if library calls displaybooklist
+//    }
 }

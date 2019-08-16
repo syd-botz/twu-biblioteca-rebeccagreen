@@ -8,9 +8,9 @@ import java.util.*;
 public class Library {
 
     private PrintStream printStream;
-    private ArrayList<Map<String, String>> bookList;
+    private ArrayList<Book> bookList;
 
-    public Library(PrintStream printStream, ArrayList<Map<String, String>> bookList) {
+    public Library(PrintStream printStream, ArrayList<Book> bookList) {
 
         this.printStream = printStream;
         this.bookList = bookList;
@@ -21,9 +21,9 @@ public class Library {
         printStream.println("welcome to rebecca and syd's library!");
     }
 
-    public void printBook(){
-        for (Map<String, String> book : bookList){
-            printStream.println(book.get("title") + " " + book.get("author") + " in " + book.get("year"));
+    public void printBooklist(){
+        for (Book book : bookList){
+            book.printBook(printStream);
         }
     }
 

@@ -10,35 +10,43 @@ import java.util.Map;
 public class BibliotecaApp {
 
     private OutputStream outputStream;
+    private Library library;
+    private PrintStream printStream;
 
-    public BibliotecaApp(OutputStream outputStream){
+
+    public BibliotecaApp(Library library, OutputStream outputStream, PrintStream printStream) {
         this.outputStream = outputStream;
+        this.library = library;
+        this.printStream = printStream;
     }
 
     public static void main(String[] args) {
-        BibliotecaApp app = new BibliotecaApp(System.out);
+        ArrayList<Book> bookList = new ArrayList<Book>();
 
-        ArrayList<Map<String, String>> bookList = new ArrayList();
-        Map<String, String> book1 = new HashMap<String, String>();
-        Map<String, String> book2 = new HashMap<String, String>();
+        bookList.add(new Book("1984", "George Orwell", "2010"));
+        bookList.add(new Book("Beloved", "Toni Morrison", "2005"));
 
+        ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
+        PrintStream printStream = new PrintStream(System.out);
 
-        book1.put("title", "1984");
-        book1.put("author", "George Orwell");
-        book1.put("year", "2010");
-        book2.put("title", "Beloved");
-        book2.put("author", "Toni Morrison");
-        book2.put("year", "2005");
+        Library lib = new Library(printStream, bookList);
 
-        bookList.add(book1);
-        bookList.add(book2);
+        BibliotecaApp app = new BibliotecaApp(lib, byteOutputStream, printStream);
 
-        app.start(bookList);
+        app.start();
     }
 
-    public void start(ArrayList<Map<String, String>> bookList){
-        Library library = new Library(new PrintStream(outputStream), bookList);
+    public void start(){
+//        need outputstream to create print stream to pass to library
+//        PrintStream printStream = new PrintStream((outputStream));
         library.showWelcomeMessage();
-        library.printBook();
+        displayWelcomeMessage();
+        library.printBooklist();
+    }
+
+    public void displayWelcomeMessage(){
+        printStream.println("Options");
+        printStream.println("1 - List of Books");
+        printStream.println("Please Enter the Number of Your Choice Here: ");
     }
 }
