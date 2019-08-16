@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
@@ -20,14 +21,34 @@ public class BibliotecaAppTest {
     public void setUp() {
       outputStream = new ByteArrayOutputStream();
       out = new PrintStream(outputStream);
-      //lib = new Library(out);
+      BibliotecaApp app = new BibliotecaApp(outputStream);
+      String[] bookList = {"1984", "Beloved", "House of the Spirits", "How to Do Nothing", "Blah"};
+      app.start(bookList);
     }
 
     @Test
     public void shouldSeeWelcomeMessageWhenAppStarts() {
-        BibliotecaApp app = new BibliotecaApp(outputStream);
-        app.start();
-        assertThat(outputStream.toString(), containsString("welcome"));
+        assertThat(outputStream.toString(), containsString("welcome to rebecca and syd's library!"));
+    }
+
+    @Test
+    public void shouldSee1984AfterWelcomeMessage() throws IOException {
+        String[] output = outputStream.toString().split("\n");
+        assertThat(output[1], is("1984"));
+    }
+
+    @Test
+    public void shouldPrintTwoBooksAfterWelcomeMessage(){
+        String[] output = outputStream.toString().split("\n");
+        assertThat(output[1], is("1984"));
+        assertThat(output[2], is("Beloved"));
+    }
+
+    @Test
+    public void shouldPrintNumberOfBooksInBookList(){
+        String[] output = outputStream.toString().split("\n");
+        Integer numOfBooks = output.length-1;
+        assertThat(5, is(numOfBooks));
     }
 
 }
