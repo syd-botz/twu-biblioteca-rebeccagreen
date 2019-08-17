@@ -47,8 +47,8 @@ public class BibliotecaApp {
     public void start() throws IOException {
 //        need outputstream to create print stream to pass to library
 //        PrintStream printStream = new PrintStream((outputStream));
-        library.showWelcomeMessage();
         bibliotecaAppView.displayWelcomeMessage();
+        bibliotecaAppView.displayOptionMenu();
         Boolean running = true;
         String choice = getUserInput();
 
