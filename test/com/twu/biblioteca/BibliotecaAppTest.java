@@ -97,10 +97,26 @@ public class BibliotecaAppTest {
 
 
     @Test
-    public void shouldPrintTwoBooksAfterWelcomeMessage(){
-        String[] output = outputStream.toString().split("\n");
-        assertThat(output[4], containsString("1984"));
-        assertThat(output[5], containsString("Beloved"));
+    public void shouldPrintTwoBooksWhenOption1IsSelectedAndThereAreTwoBooksInTheLibrary() throws IOException {
+        // make app with library with one mock book in it
+
+        ArrayList<Book> bookList = new ArrayList<Book>();
+        Book mockBook = mock(Book.class);
+        Book mockBook2 = mock(Book.class);
+        bookList.add(mockBook);
+        bookList.add(mockBook2);
+        Library libWithMockBook = new Library(mockPrintStream, bookList);
+        OutputStream mockOutputStream = mock(OutputStream.class);
+        app = new BibliotecaApp(libWithMockBook, mockOutputStream, mockPrintStream, bufferedReader, mockBibliotecaAppView);
+
+        // Choose option 1
+        when(bufferedReader.readLine()).thenReturn("1").thenReturn("q");
+        app.start();
+
+        // check if print book is called on mock book one time
+        verify(mockBook).printBook(mockPrintStream);
+        verify(mockBook2).printBook(mockPrintStream);
+
     }
 
     @Test
