@@ -19,6 +19,7 @@ public class BibliotecaAppTest {
     private PrintStream out;
     private Library lib;
     private BufferedReader reader;
+    private BibliotecaAppView bibliotecaAppView;
 
     @Before
     public void setUp() throws IOException {
@@ -33,10 +34,13 @@ public class BibliotecaAppTest {
       outputStream = new ByteArrayOutputStream();
       out = new PrintStream(outputStream);
       lib = new Library(out, bookList);
+      bibliotecaAppView = new BibliotecaAppView(out);
+
+
 
 
         when(reader.readLine()).thenReturn("1");
-        BibliotecaApp app = new BibliotecaApp(lib, outputStream, out, reader);
+        BibliotecaApp app = new BibliotecaApp(lib, outputStream, out, reader, bibliotecaAppView);
        app.start();
     }
 
@@ -50,7 +54,7 @@ public class BibliotecaAppTest {
     @Test
     public void mock_shouldAppStartTriggerLibraryDisplayWelcomeMessage() throws IOException {
         Library mockLibrary = mock(Library.class);
-        BibliotecaApp app = new BibliotecaApp(mockLibrary, outputStream, out, reader);
+        BibliotecaApp app = new BibliotecaApp(mockLibrary, outputStream, out, reader, bibliotecaAppView);
         app.start();
         verify(mockLibrary).showWelcomeMessage();
     }
@@ -129,11 +133,44 @@ public class BibliotecaAppTest {
         PrintStream mockPrintStream = mock(PrintStream.class);
         OutputStream mockOutputStream = mock(OutputStream.class);
         Library mockLibrary = mock(Library.class);
-        BibliotecaApp mockApp = new BibliotecaApp(mockLibrary, mockOutputStream, mockPrintStream, bufferedReader);
+        BibliotecaAppView mockBibliotecaAppView = mock(BibliotecaAppView.class);
+        BibliotecaApp mockApp = new BibliotecaApp(mockLibrary, mockOutputStream, mockPrintStream, bufferedReader, mockBibliotecaAppView);
 
         when(bufferedReader.readLine()).thenReturn("1");
 
         mockApp.start();
         verify(mockLibrary).printBooklist();
     }
+
+    @Test
+    public void shouldInformUserOfInValidInputWhenInputIsNot1() throws IOException {
+        BufferedReader bufferedReader = mock(BufferedReader.class);
+        PrintStream mockPrintStream = mock(PrintStream.class);
+        OutputStream mockOutputStream = mock(OutputStream.class);
+        Library mockLibrary = mock(Library.class);
+        BibliotecaAppView mockBibliotecaAppView = mock(BibliotecaAppView.class);
+        BibliotecaApp app = new BibliotecaApp(mockLibrary, mockOutputStream, mockPrintStream, bufferedReader, mockBibliotecaAppView);
+
+//        BibliotecaApp mockApp = new BibliotecaApp(mockLibrary, mockOutputStream, mockPrintStream, bufferedReader);
+
+        when(bufferedReader.readLine()).thenReturn("2").thenReturn("1");
+
+        app.start();
+        verify(mockBibliotecaAppView, atLeastOnce()).printInvalidInputMessage();
+    }
+//    @Test
+//    public void shouldQuitApplicationWhenUserInputsQFromOptionMenu() throws IOException {
+//        BufferedReader bufferedReader = mock(BufferedReader.class);
+//        PrintStream mockPrintStream = mock(PrintStream.class);
+//        OutputStream mockOutputStream = mock(OutputStream.class);
+//        Library mockLibrary = mock(Library.class);
+//        BibliotecaAppView mockBibliotecaAppView = mock(BibliotecaAppView.class);
+//        BibliotecaApp mockApp = new BibliotecaApp(mockLibrary, mockOutputStream, mockPrintStream, bufferedReader, mockBibliotecaAppView);
+//
+//        when(bufferedReader.readLine()).thenReturn("Q");
+//
+//        mockApp.start();
+//
+//        verify(mockLibrary).printBooklist();
+//    }
 }

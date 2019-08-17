@@ -11,13 +11,16 @@ public class BibliotecaApp {
     private OutputStream outputStream;
     private Library library;
     private PrintStream printStream;
+    private BibliotecaAppView bibliotecaAppView;
 
 
-    public BibliotecaApp(Library library, OutputStream outputStream, PrintStream printStream, BufferedReader reader) {
+
+    public BibliotecaApp(Library library, OutputStream outputStream, PrintStream printStream, BufferedReader reader, BibliotecaAppView bibliotecaAppView) {
         this.outputStream = outputStream;
         this.library = library;
         this.printStream = printStream;
         this.reader = reader;
+        this.bibliotecaAppView = bibliotecaAppView;
     }
 
     public static void main(String[] args) throws IOException {
@@ -29,10 +32,12 @@ public class BibliotecaApp {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(System.out);
+        BibliotecaAppView bibliotecaAppView = new BibliotecaAppView(printStream);
 
         Library lib = new Library(printStream, bookList);
+        BibliotecaApp app = new BibliotecaApp(lib, byteOutputStream, printStream, reader, bibliotecaAppView);
 
-        BibliotecaApp app = new BibliotecaApp(lib, byteOutputStream, printStream, reader);
+
 
         app.start();
     }
@@ -41,20 +46,28 @@ public class BibliotecaApp {
 //        need outputstream to create print stream to pass to library
 //        PrintStream printStream = new PrintStream((outputStream));
         library.showWelcomeMessage();
-        displayWelcomeMessage();
+        bibliotecaAppView.displayWelcomeMessage();
         String choice = getUserInput();
-        if (choice.equals("1")) {
-            library.printBooklist();
+
+        while(!choice.equals("1")){
+            bibliotecaAppView.printInvalidInputMessage();
+            bibliotecaAppView.displayWelcomeMessage();
+            choice = getUserInput();
         }
+        library.printBooklist();
     }
 
-    public void displayWelcomeMessage(){
-        printStream.println("Options");
-        printStream.println("1 - List of Books");
-        printStream.println("Please Enter the Number of Your Choice Here: ");
-    }
+//    public void displayWelcomeMessage(){
+//        printStream.println("Options");
+//        printStream.println("1 - List of Books");
+//        printStream.println("Please Enter the Number of Your Choice Here: ");
+//    }
 
     private String getUserInput() throws IOException {
         return reader.readLine();
     }
+
+//    public void printInvalidInputMessage() {
+//        printStream.println("Please Enter a Valid Option");
+//    }
 }
