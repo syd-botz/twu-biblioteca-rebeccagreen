@@ -77,7 +77,7 @@ public class BibliotecaAppTest {
 
 
     @Test
-    public void shouldSee1984AfterWelcomeMessage() throws IOException {
+    public void shouldPrintOneBookWhenOption1IsSelectedAndThereIsOneBookInTheLibrary() throws IOException {
         // make app with library with one mock book in it
 
         ArrayList<Book> bookList = new ArrayList<Book>();
