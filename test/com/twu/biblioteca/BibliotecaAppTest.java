@@ -5,123 +5,109 @@ import org.junit.Test;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
-
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 public class BibliotecaAppTest {
     private ByteArrayOutputStream outputStream;
-    private PrintStream out;
-    private Library lib;
-    private BufferedReader reader;
+    private PrintStream mockPrintStream ;
+    private Library mockLibrary;
+    private BufferedReader bufferedReader;
+    private BibliotecaAppView mockBibliotecaAppView;
+    private BibliotecaApp app;
 
     @Before
-    public void setUp() throws IOException {
+    public void setUp() {
 
-      ArrayList<Book> bookList = new ArrayList<Book>();
+        bufferedReader = mock(BufferedReader.class);
+        mockPrintStream = mock(PrintStream.class);
+        OutputStream mockOutputStream = mock(OutputStream.class);
+        mockLibrary = mock(Library.class);
+        mockBibliotecaAppView = mock(BibliotecaAppView.class);
+        app = new BibliotecaApp(mockLibrary, mockOutputStream, mockPrintStream, bufferedReader, mockBibliotecaAppView);
 
-      bookList.add(new Book("1984", "George Orwell", "2010"));
-      bookList.add(new Book("Beloved", "Toni Morrison", "2005"));
-
-//    reader = new BufferedReader(new InputStreamReader(System.in));
-      reader = mock(BufferedReader.class);
-      outputStream = new ByteArrayOutputStream();
-      out = new PrintStream(outputStream);
-      lib = new Library(out, bookList);
-
-
-        when(reader.readLine()).thenReturn("1");
-        BibliotecaApp app = new BibliotecaApp(lib, outputStream, out, reader);
-       app.start();
     }
 
     @Test
     public void shouldSeeWelcomeMessageWhenAppStarts() throws IOException {
-        //BibliotecaApp app = new BibliotecaApp(lib, outputStream, out, reader);
-        //app.start();
-        assertThat(outputStream.toString(), containsString("welcome to rebecca and syd's library!"));
+        when(bufferedReader.readLine()).thenReturn("1").thenReturn("q");
+        app.start();
+        verify(mockBibliotecaAppView).displayWelcomeMessage();
     }
 
     @Test
-    public void mock_shouldAppStartTriggerLibraryDisplayWelcomeMessage() throws IOException {
-        Library mockLibrary = mock(Library.class);
-        BibliotecaApp app = new BibliotecaApp(mockLibrary, outputStream, out, reader);
+    public void shouldDisplayOptionsAfterWelcomeMessage() throws IOException {
+        when(bufferedReader.readLine()).thenReturn("1").thenReturn("q");
         app.start();
-        verify(mockLibrary).showWelcomeMessage();
+        verify(mockBibliotecaAppView).displayOptionMenu();
     }
+
 
     @Test
     public void mock_shouldSeeIfStartIsCalled() throws IOException {
         BibliotecaApp mockApp = mock(BibliotecaApp.class);
-
         mockApp.start();
-
         verify(mockApp).start();
     }
 
 
     @Test
-    public void shouldSee1984AfterWelcomeMessage() throws IOException {
-        String[] output = outputStream.toString().split("\n");
-        assertThat(output[4], containsString("1984"));
+    public void shouldPrintOneBookWhenOption1IsSelectedAndThereIsOneBookInTheLibrary() throws IOException {
+        // make app with library with one mock book in it
+
+        ArrayList<Book> bookList = new ArrayList<Book>();
+        Book mockBook = mock(Book.class);
+        bookList.add(mockBook);
+        Library libWithMockBook = new Library(mockPrintStream, bookList);
+        OutputStream mockOutputStream = mock(OutputStream.class);
+        app = new BibliotecaApp(libWithMockBook, mockOutputStream, mockPrintStream, bufferedReader, mockBibliotecaAppView);
+
+        // Choose option 1
+        when(bufferedReader.readLine()).thenReturn("1").thenReturn("q");
+        app.start();
+
+        // check if print book is called on mock book one time
+        verify(mockBook).printBook(mockPrintStream);
     }
 
 
     @Test
-    public void shouldPrintTwoBooksAfterWelcomeMessage(){
-        String[] output = outputStream.toString().split("\n");
-        assertThat(output[4], containsString("1984"));
-        assertThat(output[5], containsString("Beloved"));
-    }
+    public void shouldPrintTwoBooksWhenOption1IsSelectedAndThereAreTwoBooksInTheLibrary() throws IOException {
+        // make app with library with one mock book in it
 
-    @Test
-    public void shouldPrintNumberOfBooksInBookList(){
-        String[] output = outputStream.toString().split("\n");
-        Integer numOfBooks = output.length-4;
-        assertThat(numOfBooks, is(2));
-    }
+        ArrayList<Book> bookList = new ArrayList<Book>();
+        Book mockBook = mock(Book.class);
+        Book mockBook2 = mock(Book.class);
+        bookList.add(mockBook);
+        bookList.add(mockBook2);
+        Library libWithMockBook = new Library(mockPrintStream, bookList);
+        OutputStream mockOutputStream = mock(OutputStream.class);
+        app = new BibliotecaApp(libWithMockBook, mockOutputStream, mockPrintStream, bufferedReader, mockBibliotecaAppView);
 
-    @Test
-    public void shouldPrintAuthorWhenListingBookTitleInBookList(){
-        String[] output = outputStream.toString().split("\n");
-        assertThat(output[4], containsString("George Orwell"));
-    }
+        // Choose option 1
+        when(bufferedReader.readLine()).thenReturn("1").thenReturn("q");
+        app.start();
 
-    @Test
-    public void shouldPrintYearWhenListingBookTitleInBookList(){
-        String[] output = outputStream.toString().split("\n");
-        assertThat(output[4], containsString("2010"));
-    }
-
-    @Test
-    public void shouldDisplayOptionsAfterWelcomeMessage(){
-        String[] output = outputStream.toString().split("\n");
-        assertThat(output[1], is("Options"));
-        assertThat(output[2], is("1 - List of Books"));
-        assertThat(output[3], is("Please Enter the Number of Your Choice Here: "));
+        // check if print book is called on mock book one time
+        verify(mockBook, times(1)).printBook(mockPrintStream);
+        verify(mockBook2, times(1)).printBook(mockPrintStream);
     }
 
 //    @Test
-//    public void shouldSeeListOfBooksWhen1IsSelected() throws IOException {
-////        user input gather from scanner is 1
-////        Scanner scanner = new Scanner(System.in);
-////        String userInput = scanner.nextLine();
+//    public void shouldPrintAuthorWhenListingBookTitleInBookList(){
+////         create a book view that formats how to print a book
+////        test if printAuthor & printTitle is called on the book
 //
-//        BufferedReader bufferedReader = mock(BufferedReader.class);
-//        when(bufferedReader.readLine()).thenReturn("1");
-//
-//        verify(bufferedReader)
-//
-////        set up scanner wrapper to always choose 1
-//
-////        then the library should display the book list
-////        so we want to check to see if library calls displaybooklist
+//        String[] output = outputStream.toString().split("\n");
+//        assertThat(output[4], containsString("George Orwell"));
 //    }
+//
+//    @Test
+//    public void shouldPrintYearWhenListingBookTitleInBookList(){
+////        see above
+//        String[] output = outputStream.toString().split("\n");
+//        assertThat(output[4], containsString("2010"));
+//    }
+
 
     @Test
     public void shouldDisplayWhen1IsSelectedFromOptions() throws IOException {
@@ -129,11 +115,42 @@ public class BibliotecaAppTest {
         PrintStream mockPrintStream = mock(PrintStream.class);
         OutputStream mockOutputStream = mock(OutputStream.class);
         Library mockLibrary = mock(Library.class);
-        BibliotecaApp mockApp = new BibliotecaApp(mockLibrary, mockOutputStream, mockPrintStream, bufferedReader);
+        BibliotecaAppView mockBibliotecaAppView = mock(BibliotecaAppView.class);
+        BibliotecaApp app = new BibliotecaApp(mockLibrary, mockOutputStream, mockPrintStream, bufferedReader, mockBibliotecaAppView);
 
-        when(bufferedReader.readLine()).thenReturn("1");
+        when(bufferedReader.readLine()).thenReturn("1").thenReturn("q");
 
-        mockApp.start();
+        app.start();
         verify(mockLibrary).printBooklist();
+    }
+
+    @Test
+    public void shouldInformUserOfInValidInputWhenInputIsNot1() throws IOException {
+        BufferedReader bufferedReader = mock(BufferedReader.class);
+        PrintStream mockPrintStream = mock(PrintStream.class);
+        OutputStream mockOutputStream = mock(OutputStream.class);
+        Library mockLibrary = mock(Library.class);
+        BibliotecaAppView mockBibliotecaAppView = mock(BibliotecaAppView.class);
+        BibliotecaApp app = new BibliotecaApp(mockLibrary, mockOutputStream, mockPrintStream, bufferedReader, mockBibliotecaAppView);
+
+        when(bufferedReader.readLine()).thenReturn("2").thenReturn("1").thenReturn("q");
+
+        app.start();
+        verify(mockBibliotecaAppView, atLeastOnce()).printInvalidInputMessage();
+    }
+    @Test
+    public void shouldQuitApplicationWhenUserInputsQFromOptionMenu() throws IOException {
+        BufferedReader bufferedReader = mock(BufferedReader.class);
+        PrintStream mockPrintStream = mock(PrintStream.class);
+        OutputStream mockOutputStream = mock(OutputStream.class);
+        Library mockLibrary = mock(Library.class);
+        BibliotecaAppView mockBibliotecaAppView = mock(BibliotecaAppView.class);
+        BibliotecaApp app = new BibliotecaApp(mockLibrary, mockOutputStream, mockPrintStream, bufferedReader, mockBibliotecaAppView);
+
+        when(bufferedReader.readLine()).thenReturn("q");
+
+        app.start();
+
+        verify(mockBibliotecaAppView).showQuitMessage();
     }
 }

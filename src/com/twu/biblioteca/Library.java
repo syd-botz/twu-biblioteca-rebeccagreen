@@ -16,10 +16,10 @@ public class Library {
         this.bookList = bookList;
     }
 
-    public void showWelcomeMessage(){
-
-        printStream.println("welcome to rebecca and syd's library!");
-    }
+//    public void showWelcomeMessage(){
+//
+//        printStream.println("welcome to rebecca and syd's library!");
+//    }
 
     public void printBooklist(){
         for (Book book : bookList){
