@@ -1,5 +1,7 @@
 package com.twu.biblioteca;
 
+import sun.font.TrueTypeFont;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,21 +49,42 @@ public class BibliotecaApp {
 //        PrintStream printStream = new PrintStream((outputStream));
         library.showWelcomeMessage();
         bibliotecaAppView.displayWelcomeMessage();
+        Boolean running = true;
         String choice = getUserInput();
 
-        while(!choice.equals("1")){
-            bibliotecaAppView.printInvalidInputMessage();
-            bibliotecaAppView.displayWelcomeMessage();
-            choice = getUserInput();
+        while (running){
+            if (choice.equals("1")){
+                library.printBooklist();
+                choice = getUserInput().toLowerCase();
+            }
+            else if(choice.equals("q")){
+                bibliotecaAppView.showQuitMessage();
+                running = false;
+            }
+            else{
+                bibliotecaAppView.printInvalidInputMessage();
+                bibliotecaAppView.displayWelcomeMessage();
+                choice = getUserInput().toLowerCase();
+            }
         }
-        library.printBooklist();
+
+//        while(!choice.equals("q")) {
+//////            if (choice.equals("1")) {
+//////                library.printBooklist();
+////////                choice = getUserInput().toLowerCase();
+//////            } else {
+//////                bibliotecaAppView.printInvalidInputMessage();
+//////                bibliotecaAppView.displayWelcomeMessage();
+////////                choice = getUserInput().toLowerCase();
+//////            }
+//////            choice = getUserInput().toLowerCase();
+//////        }
+//////        bibliotecaAppView.showQuitMessage();
+////////        System.exit(1);
+
+
     }
 
-//    public void displayWelcomeMessage(){
-//        printStream.println("Options");
-//        printStream.println("1 - List of Books");
-//        printStream.println("Please Enter the Number of Your Choice Here: ");
-//    }
 
     private String getUserInput() throws IOException {
         return reader.readLine();

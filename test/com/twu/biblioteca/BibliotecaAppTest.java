@@ -1,5 +1,6 @@
 package com.twu.biblioteca;
 
+import com.sun.tools.internal.ws.wsdl.document.Output;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,10 +17,11 @@ import static org.mockito.Mockito.*;
 
 public class BibliotecaAppTest {
     private ByteArrayOutputStream outputStream;
-    private PrintStream out;
-    private Library lib;
-    private BufferedReader reader;
-    private BibliotecaAppView bibliotecaAppView;
+    private PrintStream mockPrintStream ;
+    private Library mockLibrary;
+    private BufferedReader bufferedReader;
+    private BibliotecaAppView mockBibliotecaAppView;
+    private BibliotecaApp app;
 
     @Before
     public void setUp() throws IOException {
@@ -30,34 +32,41 @@ public class BibliotecaAppTest {
       bookList.add(new Book("Beloved", "Toni Morrison", "2005"));
 
 //    reader = new BufferedReader(new InputStreamReader(System.in));
-      reader = mock(BufferedReader.class);
-      outputStream = new ByteArrayOutputStream();
-      out = new PrintStream(outputStream);
-      lib = new Library(out, bookList);
-      bibliotecaAppView = new BibliotecaAppView(out);
+//      reader = mock(BufferedReader.class);
+//      outputStream = new ByteArrayOutputStream();
+//      out = new PrintStream(outputStream);
+//      lib = new Library(out, bookList);
+//      bibliotecaAppView = new BibliotecaAppView(out);
+
+        bufferedReader = mock(BufferedReader.class);
+        mockPrintStream = mock(PrintStream.class);
+        OutputStream mockOutputStream = mock(OutputStream.class);
+        mockLibrary = mock(Library.class);
+        mockBibliotecaAppView = mock(BibliotecaAppView.class);
+        app = new BibliotecaApp(mockLibrary, mockOutputStream, mockPrintStream, bufferedReader, mockBibliotecaAppView);
 
 
 
 
-        when(reader.readLine()).thenReturn("1");
-        BibliotecaApp app = new BibliotecaApp(lib, outputStream, out, reader, bibliotecaAppView);
-       app.start();
+//        when(reader.readLine()).thenReturn("1").thenReturn("q");
+//        BibliotecaApp app = new BibliotecaApp(lib, outputStream, out, reader, bibliotecaAppView);
+//       app.start();
     }
 
     @Test
     public void shouldSeeWelcomeMessageWhenAppStarts() throws IOException {
-        //BibliotecaApp app = new BibliotecaApp(lib, outputStream, out, reader);
-        //app.start();
-        assertThat(outputStream.toString(), containsString("welcome to rebecca and syd's library!"));
-    }
-
-    @Test
-    public void mock_shouldAppStartTriggerLibraryDisplayWelcomeMessage() throws IOException {
-        Library mockLibrary = mock(Library.class);
-        BibliotecaApp app = new BibliotecaApp(mockLibrary, outputStream, out, reader, bibliotecaAppView);
+        when(bufferedReader.readLine()).thenReturn("1").thenReturn("q");
         app.start();
         verify(mockLibrary).showWelcomeMessage();
     }
+
+//    @Test
+//    public void mock_shouldAppStartTriggerLibraryDisplayWelcomeMessage() throws IOException {
+//        Library mockLibrary = mock(Library.class);
+//        BibliotecaApp app = new BibliotecaApp(mockLibrary, outputStream, out, reader, bibliotecaAppView);
+//        app.start();
+//        verify(mockLibrary).showWelcomeMessage();
+//    }
 
     @Test
     public void mock_shouldSeeIfStartIsCalled() throws IOException {
@@ -85,6 +94,7 @@ public class BibliotecaAppTest {
 
     @Test
     public void shouldPrintNumberOfBooksInBookList(){
+
         String[] output = outputStream.toString().split("\n");
         Integer numOfBooks = output.length-4;
         assertThat(numOfBooks, is(2));
@@ -134,11 +144,11 @@ public class BibliotecaAppTest {
         OutputStream mockOutputStream = mock(OutputStream.class);
         Library mockLibrary = mock(Library.class);
         BibliotecaAppView mockBibliotecaAppView = mock(BibliotecaAppView.class);
-        BibliotecaApp mockApp = new BibliotecaApp(mockLibrary, mockOutputStream, mockPrintStream, bufferedReader, mockBibliotecaAppView);
+        BibliotecaApp app = new BibliotecaApp(mockLibrary, mockOutputStream, mockPrintStream, bufferedReader, mockBibliotecaAppView);
 
-        when(bufferedReader.readLine()).thenReturn("1");
+        when(bufferedReader.readLine()).thenReturn("1").thenReturn("q");
 
-        mockApp.start();
+        app.start();
         verify(mockLibrary).printBooklist();
     }
 
@@ -153,24 +163,24 @@ public class BibliotecaAppTest {
 
 //        BibliotecaApp mockApp = new BibliotecaApp(mockLibrary, mockOutputStream, mockPrintStream, bufferedReader);
 
-        when(bufferedReader.readLine()).thenReturn("2").thenReturn("1");
+        when(bufferedReader.readLine()).thenReturn("2").thenReturn("1").thenReturn("q");
 
         app.start();
         verify(mockBibliotecaAppView, atLeastOnce()).printInvalidInputMessage();
     }
-//    @Test
-//    public void shouldQuitApplicationWhenUserInputsQFromOptionMenu() throws IOException {
-//        BufferedReader bufferedReader = mock(BufferedReader.class);
-//        PrintStream mockPrintStream = mock(PrintStream.class);
-//        OutputStream mockOutputStream = mock(OutputStream.class);
-//        Library mockLibrary = mock(Library.class);
-//        BibliotecaAppView mockBibliotecaAppView = mock(BibliotecaAppView.class);
-//        BibliotecaApp mockApp = new BibliotecaApp(mockLibrary, mockOutputStream, mockPrintStream, bufferedReader, mockBibliotecaAppView);
-//
-//        when(bufferedReader.readLine()).thenReturn("Q");
-//
-//        mockApp.start();
-//
-//        verify(mockLibrary).printBooklist();
-//    }
+    @Test
+    public void shouldQuitApplicationWhenUserInputsQFromOptionMenu() throws IOException {
+        BufferedReader bufferedReader = mock(BufferedReader.class);
+        PrintStream mockPrintStream = mock(PrintStream.class);
+        OutputStream mockOutputStream = mock(OutputStream.class);
+        Library mockLibrary = mock(Library.class);
+        BibliotecaAppView mockBibliotecaAppView = mock(BibliotecaAppView.class);
+        BibliotecaApp app = new BibliotecaApp(mockLibrary, mockOutputStream, mockPrintStream, bufferedReader, mockBibliotecaAppView);
+
+        when(bufferedReader.readLine()).thenReturn("q");
+
+        app.start();
+
+        verify(mockBibliotecaAppView).showQuitMessage();
+    }
 }
