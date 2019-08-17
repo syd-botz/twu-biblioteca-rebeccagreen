@@ -39,14 +39,10 @@ public class BibliotecaApp {
         Library lib = new Library(printStream, bookList);
         BibliotecaApp app = new BibliotecaApp(lib, byteOutputStream, printStream, reader, bibliotecaAppView);
 
-
-
         app.start();
     }
 
     public void start() throws IOException {
-//        need outputstream to create print stream to pass to library
-//        PrintStream printStream = new PrintStream((outputStream));
         bibliotecaAppView.displayWelcomeMessage();
         bibliotecaAppView.displayOptionMenu();
         Boolean running = true;
@@ -68,29 +64,10 @@ public class BibliotecaApp {
             }
         }
 
-//        while(!choice.equals("q")) {
-//////            if (choice.equals("1")) {
-//////                library.printBooklist();
-////////                choice = getUserInput().toLowerCase();
-//////            } else {
-//////                bibliotecaAppView.printInvalidInputMessage();
-//////                bibliotecaAppView.displayWelcomeMessage();
-////////                choice = getUserInput().toLowerCase();
-//////            }
-//////            choice = getUserInput().toLowerCase();
-//////        }
-//////        bibliotecaAppView.showQuitMessage();
-////////        System.exit(1);
-
-
     }
-
 
     private String getUserInput() throws IOException {
         return reader.readLine();
     }
 
-//    public void printInvalidInputMessage() {
-//        printStream.println("Please Enter a Valid Option");
-//    }
 }
