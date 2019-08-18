@@ -5,7 +5,11 @@ import org.junit.Test;
 
 import java.io.*;
 import java.util.ArrayList;
+
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.*;
+import static sun.nio.cs.Surrogate.is;
 
 public class BibliotecaAppTest {
     private ByteArrayOutputStream outputStream;
@@ -153,4 +157,85 @@ public class BibliotecaAppTest {
 
         verify(mockBibliotecaAppView).showQuitMessage();
     }
+
+    @Test
+    // Checkout is an option in the menu of options
+    public void shouldDisplayUserOptionToCheckOutBookInMenu() throws IOException {
+        ArrayList<Book> bookList = new ArrayList<Book>();
+
+        BufferedReader bufferedReader = mock(BufferedReader.class);
+        ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
+        PrintStream printStream = new PrintStream(byteOutputStream);
+        BibliotecaAppView bibliotecaAppView = new BibliotecaAppView(printStream);
+        Library lib = new Library(printStream, bookList);
+        BibliotecaApp app = new BibliotecaApp(lib, byteOutputStream, printStream, bufferedReader, bibliotecaAppView);
+
+        when(bufferedReader.readLine()).thenReturn("q");
+
+        app.start();
+
+        String output = byteOutputStream.toString();
+        assertThat(output, containsString("2 - Checkout Book"));
+    }
+
+    @Test
+    public void shouldPromptUserToEnterABookTitleWhenOption2FromMenuIsSelected(){
+
+    }
+    
+    // Ready to Implement
+    @Test
+    public void shouldSetCheckoutToTrueWhenUserTypes1984WhenPromptedToCheckOutBook() throws IOException {
+        ArrayList<Book> bookList = new ArrayList<Book>();
+        Book beloved = new Book("Beloved", "Toni Morrison", "2010");
+        bookList.add(beloved);
+
+        BufferedReader bufferedReader = mock(BufferedReader.class);
+        ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
+        PrintStream printStream = new PrintStream(byteOutputStream);
+        BibliotecaAppView bibliotecaAppView = new BibliotecaAppView(printStream);
+        Library lib = new Library(printStream, bookList);
+        BibliotecaApp app = new BibliotecaApp(lib, byteOutputStream, printStream, bufferedReader, bibliotecaAppView);
+
+        when(bufferedReader.readLine()).thenReturn("2").thenReturn("Beloved").thenReturn("q");
+
+        app.start();
+
+//        assertThat(beloved.isCheckedOut(), is(true));
+    }
+
+    // EDIT AFTER ABOVE TEST RUNS
+    @Test
+    public void shouldNotCallPrintBookInPrintBookListMethodOnBookWhenBookIsCheckedOut() throws IOException {
+        // make app with library with one mock book in it
+
+        ArrayList<Book> bookList = new ArrayList<Book>();
+        Book mockCheckedOutBook = mock(Book.class);
+        Book mockCheckedInBook = mock(Book.class);
+        bookList.add(mockCheckedOutBook);
+        bookList.add(mockCheckedInBook);
+        Library libWithMockBook = new Library(mockPrintStream, bookList);
+        OutputStream mockOutputStream = mock(OutputStream.class);
+        app = new BibliotecaApp(libWithMockBook, mockOutputStream, mockPrintStream, bufferedReader, mockBibliotecaAppView);
+
+        // check in checkedin book
+//        when(mockCheckedInBook.isCheckedOut()).thenReturn(false);
+        // check out checkedout book
+//        when(mockCheckedInBook.isCheckedOut()).thenReturn(true);
+
+        // NEED TO EDIT THIS LINE SO THAT USER INPUT IS THE MOCK BOOK
+        // Choose option 2 - CheckoutBooks
+        when(bufferedReader.readLine()).thenReturn("2").thenReturn("q");
+
+        app.start();
+
+        verify(mockCheckedInBook, times(0)).printBook(mockPrintStream);
+        verify(mockCheckedOutBook, times(1)).printBook(mockPrintStream);
+    }
+
+    @Test
+    public void shouldReturnCheckoutAsTrueForBook1984WhenUserTypes1984AsBookToCheckout(){
+
+    }
+
 }

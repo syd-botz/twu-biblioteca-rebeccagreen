@@ -20,6 +20,7 @@ public class BibliotecaAppView {
     public void displayOptionMenu() {
         printStream.println("Options");
         printStream.println("1 - List of Books");
+        printStream.println("2 - Checkout Book");
         printStream.println("Please Enter the Number of Your Choice Here: ");
     }
 
