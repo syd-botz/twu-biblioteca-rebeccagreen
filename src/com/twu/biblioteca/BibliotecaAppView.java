@@ -14,10 +14,11 @@ public class BibliotecaAppView {
     }
 
     public void displayWelcomeMessage(){
-        printStream.println("welcome to rebecca and syd's library! \n");
+        printStream.println("welcome to rebecca and syd's library!");
     }
 
     public void displayOptionMenu() {
+        printStream.println();
         printStream.println("Options");
         printStream.println("1 - List of Books");
         printStream.println("2 - Checkout Book");

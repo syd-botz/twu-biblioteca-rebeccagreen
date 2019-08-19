@@ -43,7 +43,7 @@ public class BibliotecaAppTest {
     public void shouldDisplayOptionsAfterWelcomeMessage() throws IOException {
         when(bufferedReader.readLine()).thenReturn("1").thenReturn("q");
         app.start();
-        verify(mockBibliotecaAppView).displayOptionMenu();
+        verify(mockBibliotecaAppView, atLeastOnce()).displayOptionMenu();
     }
 
 
@@ -130,7 +130,7 @@ public class BibliotecaAppTest {
     }
 
     @Test
-    public void shouldInformUserOfInValidInputWhenInputIsNot1() throws IOException {
+    public void shouldInformUserOfInValidInputWhenInputIsNot1Or2OrQ() throws IOException {
         BufferedReader bufferedReader = mock(BufferedReader.class);
         PrintStream mockPrintStream = mock(PrintStream.class);
         OutputStream mockOutputStream = mock(OutputStream.class);
@@ -138,7 +138,7 @@ public class BibliotecaAppTest {
         BibliotecaAppView mockBibliotecaAppView = mock(BibliotecaAppView.class);
         BibliotecaApp app = new BibliotecaApp(mockLibrary, mockOutputStream, mockPrintStream, bufferedReader, mockBibliotecaAppView);
 
-        when(bufferedReader.readLine()).thenReturn("2").thenReturn("1").thenReturn("q");
+        when(bufferedReader.readLine()).thenReturn("Not A Valid Option").thenReturn("q");
 
         app.start();
         verify(mockBibliotecaAppView, atLeastOnce()).printInvalidInputMessage();

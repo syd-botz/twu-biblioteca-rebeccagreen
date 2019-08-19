@@ -52,6 +52,7 @@ public class BibliotecaApp {
         while (running){
             if (choice.equals("1")){
                 library.printBooklist();
+                bibliotecaAppView.displayOptionMenu();
                 choice = getUserInput().toLowerCase();
             }
             if (choice.equals("2")){
@@ -75,7 +76,9 @@ public class BibliotecaApp {
                 bibliotecaAppView.printInvalidInputMessage();
                 bibliotecaAppView.displayOptionMenu();
                 choice = getUserInput().toLowerCase();
+
             }
+
         }
 
     }
