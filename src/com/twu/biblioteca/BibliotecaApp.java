@@ -10,6 +10,7 @@ public class BibliotecaApp {
     private Library library;
     private PrintStream printStream;
     private BibliotecaAppView bibliotecaAppView;
+    private Boolean running;
 
 
 
@@ -19,6 +20,7 @@ public class BibliotecaApp {
         this.printStream = printStream;
         this.reader = reader;
         this.bibliotecaAppView = bibliotecaAppView;
+        this.running = true;
     }
 
     public static void main(String[] args) throws IOException {
@@ -41,52 +43,54 @@ public class BibliotecaApp {
     public void start() throws IOException {
         bibliotecaAppView.displayWelcomeMessage();
         bibliotecaAppView.displayOptionMenu();
-        Boolean running = true;
         String choice = getUserInput();
-
-        // This should be refactored into smaller methods
-        while (running){
-            if (choice.equals("1")){
-                library.printBooklist();
-                bibliotecaAppView.displayOptionMenu();
-                choice = getUserInput().toLowerCase();
-            }
-            if (choice.equals("2")){
-                bibliotecaAppView.displayCheckOutBookInstructions();
-                String bookToCheckOutTitle = getUserInput().toLowerCase();
-                Boolean isBookSuccessfullyCheckedOut = library.checkOut(bookToCheckOutTitle);
-                if (isBookSuccessfullyCheckedOut) {
-                    bibliotecaAppView.displayCheckOutBookSuccessful();
-                }
-                else {
-                    bibliotecaAppView.displayCheckOutBookNotSuccessful();
-                }
-                bibliotecaAppView.displayOptionMenu();
-                choice = getUserInput().toLowerCase();
-            }
-            if (choice.equals("3")){
-                bibliotecaAppView.displayReturnBookInstructions();
-                String bookToReturnTitle = getUserInput().toLowerCase();
-                Boolean isBookSuccessfullyReturned = library.returnBook(bookToReturnTitle);
-                if (isBookSuccessfullyReturned){
-                    bibliotecaAppView.displayReturnBookSuccessful();
-                }else{
-                    bibliotecaAppView.displayReturnBookNotSuccessful();
-                }
-                bibliotecaAppView.displayOptionMenu();
-                choice = getUserInput().toLowerCase();
-            }
-            else if(choice.equals("q")){
-                bibliotecaAppView.showQuitMessage();
-                running = false;
-            }
-            else{
-                bibliotecaAppView.printInvalidInputMessage();
-                bibliotecaAppView.displayOptionMenu();
-                choice = getUserInput().toLowerCase();
-
-            }
+        while (running) {
+            choice = handleUserChoice(choice);
         }
+    }
+
+    private String handleUserChoice(String choice) throws IOException {
+        if (choice.equals("1")){
+            library.printBooklist();
+            bibliotecaAppView.displayOptionMenu();
+            choice = getUserInput().toLowerCase();
+        }
+        if (choice.equals("2")){
+            bibliotecaAppView.displayCheckOutBookInstructions();
+            String bookToCheckOutTitle = getUserInput().toLowerCase();
+            Boolean isBookSuccessfullyCheckedOut = library.checkOut(bookToCheckOutTitle);
+            if (isBookSuccessfullyCheckedOut) {
+                bibliotecaAppView.displayCheckOutBookSuccessful();
+            }
+            else {
+                bibliotecaAppView.displayCheckOutBookNotSuccessful();
+            }
+            bibliotecaAppView.displayOptionMenu();
+            choice = getUserInput().toLowerCase();
+        }
+        if (choice.equals("3")){
+            bibliotecaAppView.displayReturnBookInstructions();
+            String bookToReturnTitle = getUserInput().toLowerCase();
+            Boolean isBookSuccessfullyReturned = library.returnBook(bookToReturnTitle);
+            if (isBookSuccessfullyReturned){
+                bibliotecaAppView.displayReturnBookSuccessful();
+            }else{
+                bibliotecaAppView.displayReturnBookNotSuccessful();
+            }
+            bibliotecaAppView.displayOptionMenu();
+            choice = getUserInput().toLowerCase();
+        }
+        else if(choice.equals("q")){
+            bibliotecaAppView.showQuitMessage();
+            running = false;
+        }
+        else{
+            bibliotecaAppView.printInvalidInputMessage();
+            bibliotecaAppView.displayOptionMenu();
+            choice = getUserInput().toLowerCase();
+
+        }
+        return choice;
     }
 
     private String getUserInput() throws IOException {

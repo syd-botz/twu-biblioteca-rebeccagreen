@@ -202,7 +202,6 @@ public class BibliotecaAppTest {
     // Protocol on writing a test that cannot compile?
     // Should this actually test if the code correctly notifies the user?
 
-    // REFACTOR IDEA: This test is testing exactly the same thing as above test
     @Test
     public void shouldCheckOutBookWithNotificationToUserIfUserSuccessfullyChecksOutBook() throws IOException {
         ArrayList<Book> bookList = new ArrayList<Book>();
@@ -266,7 +265,6 @@ public class BibliotecaAppTest {
 
         app.start();
 
-
         verify(mockCheckedOutBook, never()).printBook(mockPrintStream); // must never be called
    }
 
@@ -291,22 +289,20 @@ public class BibliotecaAppTest {
 
     @Test
     public void shouldPromptUserToEnterABookTitleWhenOption3FromMenuIsSelected() throws IOException {
-        ArrayList<Book> bookList = new ArrayList<Book>();
-
         BufferedReader bufferedReader = mock(BufferedReader.class);
-        ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
-        PrintStream printStream = new PrintStream(byteOutputStream);
-        BibliotecaAppView bibliotecaAppView = new BibliotecaAppView(printStream);
-        Library lib = new Library(printStream, bookList);
-        BibliotecaApp app = new BibliotecaApp(lib, byteOutputStream, printStream, bufferedReader, bibliotecaAppView);
+        PrintStream mockPrintStream = mock(PrintStream.class);
+        OutputStream mockOutputStream = mock(OutputStream.class);
+        Library mockLibrary = mock(Library.class);
+        BibliotecaAppView mockBibliotecaAppView = mock(BibliotecaAppView.class);
+        BibliotecaApp app = new BibliotecaApp(mockLibrary, mockOutputStream, mockPrintStream, bufferedReader, mockBibliotecaAppView);
 
-        when(bufferedReader.readLine()).thenReturn("3").thenReturn("q");
+        when(bufferedReader.readLine()).thenReturn("3").thenReturn("Some Title").thenReturn("q");
 
         app.start();
 
-        String output = byteOutputStream.toString();
-        assertThat(output, containsString("Please Enter The Title of the Book To Return: "));
+        verify(mockBibliotecaAppView).displayReturnBookInstructions();
     }
+    
     @Test
     public void shouldReturnBookWithNotificationToUserIfUserSuccessfullyReturnsBook() throws IOException {
         ArrayList<Book> bookList = new ArrayList<Book>();
