@@ -265,33 +265,24 @@ public class BibliotecaAppTest {
         assertThat(output, containsString("Sorry that book is not available."));
 
     }
-        // EDIT AFTER ABOVE TEST RUNS
     @Test
     public void shouldNotCallPrintBookInPrintBookListMethodOnBookWhenBookIsCheckedOut() throws IOException {
         // make app with library with one mock book in it
 
         ArrayList<Book> bookList = new ArrayList<Book>();
         Book mockCheckedOutBook = mock(Book.class);
-        Book mockCheckedInBook = mock(Book.class);
         bookList.add(mockCheckedOutBook);
-        bookList.add(mockCheckedInBook);
-        Library libWithMockBook = new Library(mockPrintStream, bookList);
+        Library lib = new Library(mockPrintStream, bookList);
         OutputStream mockOutputStream = mock(OutputStream.class);
-        app = new BibliotecaApp(libWithMockBook, mockOutputStream, mockPrintStream, bufferedReader, mockBibliotecaAppView);
+        app = new BibliotecaApp(lib, mockOutputStream, mockPrintStream, bufferedReader, mockBibliotecaAppView);
 
-        // check in checkedin book
-        when(mockCheckedInBook.getIsCheckedOut()).thenReturn(false);
-        // check out checkedout book
-        when(mockCheckedInBook.getIsCheckedOut()).thenReturn(true);
+        when(mockCheckedOutBook.getIsCheckedOut()).thenReturn(true);
 
-        // NEED TO EDIT THIS LINE SO THAT USER INPUT IS THE MOCK BOOK
-        // Choose option 2 - CheckoutBooks
-        when(bufferedReader.readLine()).thenReturn("2").thenReturn("q");
+        when(bufferedReader.readLine()).thenReturn("1").thenReturn("q");
 
         app.start();
 
-        verify(mockCheckedInBook, times(0)).printBook(mockPrintStream);
-        verify(mockCheckedOutBook, times(1)).printBook(mockPrintStream);
-    }
 
+        verify(mockCheckedOutBook, never()).printBook(mockPrintStream); // must never be called
+   }
 }

@@ -23,7 +23,9 @@ public class Library {
 
     public void printBooklist(){
         for (Book book : bookList){
-            book.printBook(printStream);
+            if (!book.getIsCheckedOut()) {
+                book.printBook(printStream);
+            }
         }
     }
 
