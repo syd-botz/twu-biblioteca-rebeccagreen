@@ -3,11 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="a04b556c-bd20-46b3-89cc-cd11fae8ec4c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/test/biblioteca/com/twu/biblioteca/BibliotecaAppTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/test/biblioteca/com/twu/biblioteca/BibliotecaAppTest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/twu/biblioteca/Library.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/twu/biblioteca/Library.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/com/twu/biblioteca/BookTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/com/twu/biblioteca/ExampleTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/com/twu/biblioteca/LibraryTest.java" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -61,6 +56,9 @@
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="" />
     </key>
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.twu.biblioteca" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -74,7 +72,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.BibliotecaAppTest">
+  <component name="RunManager" selected="Application.BibliotecaApp">
     <configuration name="BibliotecaApp" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.twu.biblioteca.BibliotecaApp" />
       <module name="biblioteca" />
@@ -103,7 +101,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="BibliotecaAppTest.shouldCheckOutBookWithNotificationToUserIfUserSuccessfullyChecksOutBook" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="BibliotecaAppTest.shouldDisplayErrorMessageIfUserInputsMovieTitleToCheckOutThatIsNotAvailable" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="biblioteca" />
       <extension name="coverage">
         <pattern>
@@ -113,7 +111,7 @@
       </extension>
       <option name="PACKAGE_NAME" value="com.twu.biblioteca" />
       <option name="MAIN_CLASS_NAME" value="com.twu.biblioteca.BibliotecaAppTest" />
-      <option name="METHOD_NAME" value="shouldCheckOutBookWithNotificationToUserIfUserSuccessfullyChecksOutBook" />
+      <option name="METHOD_NAME" value="shouldDisplayErrorMessageIfUserInputsMovieTitleToCheckOutThatIsNotAvailable" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -135,7 +133,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="BibliotecaAppTest.shouldPromptUserToEnterABookTitleWhenOption2FromMenuIsSelected" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="BibliotecaAppTest.shouldNotCallPrintMovieInPrintMovieListMethodOnBookWhenBookIsCheckedOut" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="biblioteca" />
       <extension name="coverage">
         <pattern>
@@ -145,7 +143,7 @@
       </extension>
       <option name="PACKAGE_NAME" value="com.twu.biblioteca" />
       <option name="MAIN_CLASS_NAME" value="com.twu.biblioteca.BibliotecaAppTest" />
-      <option name="METHOD_NAME" value="shouldPromptUserToEnterABookTitleWhenOption2FromMenuIsSelected" />
+      <option name="METHOD_NAME" value="shouldNotCallPrintMovieInPrintMovieListMethodOnBookWhenBookIsCheckedOut" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -153,11 +151,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.BibliotecaAppTest" />
         <item itemvalue="Application.BibliotecaApp" />
+        <item itemvalue="JUnit.BibliotecaAppTest" />
+        <item itemvalue="JUnit.BibliotecaAppTest.shouldNotCallPrintMovieInPrintMovieListMethodOnBookWhenBookIsCheckedOut" />
+        <item itemvalue="JUnit.BibliotecaAppTest.shouldDisplayErrorMessageIfUserInputsMovieTitleToCheckOutThatIsNotAvailable" />
         <item itemvalue="JUnit.BibliotecaAppTest.shouldDisplayUserOptionToCheckOutBookInMenu" />
-        <item itemvalue="JUnit.BibliotecaAppTest.shouldPromptUserToEnterABookTitleWhenOption2FromMenuIsSelected" />
-        <item itemvalue="JUnit.BibliotecaAppTest.shouldCheckOutBookWithNotificationToUserIfUserSuccessfullyChecksOutBook" />
       </list>
     </recent_temporary>
   </component>
@@ -174,6 +172,7 @@
       <workItem from="1565878569604" duration="477000" />
       <workItem from="1565879548943" duration="17916000" />
       <workItem from="1566162682376" duration="17540000" />
+      <workItem from="1566233926471" duration="4291000" />
     </task>
     <servers />
   </component>
