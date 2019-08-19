@@ -6,16 +6,17 @@ public class Book {
     private String title;
     private String author;
     private String year;
+    private Boolean isCheckedOut;
 
     public Book(String title, String author, String year) {
 
         this.title = title;
         this.author = author;
         this.year = year;
+        this.isCheckedOut = false;
     }
 
     public String getTitle(){
-
         return this.title;
     }
 
@@ -27,6 +28,19 @@ public class Book {
         return this.year;
     }
 
+    public Boolean getIsCheckedOut() {
+        return isCheckedOut;
+    }
+
+    public void checkOutBook(){
+        this.isCheckedOut = true;
+    }
+
+    public void checkInBook() {
+        this.isCheckedOut = false;
+    }
+
+//  Refactor Idea -- Make Book printing logic into its own class (BookView)
     public void printBook(PrintStream printStream){
         printStream.println(this.getTitle() + " " + this.getAuthor() + " in " + this.getYear());
 

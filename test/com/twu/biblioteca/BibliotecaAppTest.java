@@ -5,40 +5,93 @@ import org.junit.Test;
 
 import java.io.*;
 import java.util.ArrayList;
+
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertTrue;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.*;
 
 public class BibliotecaAppTest {
     private ByteArrayOutputStream outputStream;
     private PrintStream mockPrintStream ;
     private Library mockLibrary;
-    private BufferedReader bufferedReader;
+    private BufferedReader mockBufferedReader;
     private BibliotecaAppView mockBibliotecaAppView;
-    private BibliotecaApp app;
+    private BibliotecaAppView bibliotecaAppView;
+    private BibliotecaApp realAppWithMockParameters;
+    private BibliotecaApp appWithBelovedInLibrary;
+    private BibliotecaApp appWithTwilightInLibrary;
+    private BibliotecaApp appWithMockBook;
+    private BibliotecaApp appWithTwoMockBooks;
+    private BibliotecaApp appWithMockMovie;
+    private BibliotecaApp appWithRealBibliotecaView;
+    private Book beloved;
+    private Book mockBook;
+    private Book mockBook2;
+    private Movie twilight;
+    private Movie mockMovie;
 
     @Before
     public void setUp() {
 
-        bufferedReader = mock(BufferedReader.class);
+        mockBufferedReader = mock(BufferedReader.class);
         mockPrintStream = mock(PrintStream.class);
-        OutputStream mockOutputStream = mock(OutputStream.class);
         mockLibrary = mock(Library.class);
         mockBibliotecaAppView = mock(BibliotecaAppView.class);
-        app = new BibliotecaApp(mockLibrary, mockOutputStream, mockPrintStream, bufferedReader, mockBibliotecaAppView);
+        realAppWithMockParameters = new BibliotecaApp(mockLibrary, mockBufferedReader, mockBibliotecaAppView);
+
+        ArrayList<Book> belovedBookList = new ArrayList<Book>();
+        beloved = new Book("Beloved", "Toni Morrison", "2010");
+        belovedBookList.add(beloved);
+        ArrayList<Movie> stubMovieList = new ArrayList<Movie>();
+        Library libraryWithBeloved = new Library(mockPrintStream, belovedBookList, stubMovieList);
+        appWithBelovedInLibrary = new BibliotecaApp(libraryWithBeloved, mockBufferedReader, mockBibliotecaAppView);
+
+        ArrayList<Book> bookList = new ArrayList<Book>();
+        mockBook = mock(Book.class);
+        bookList.add(mockBook);
+        Library libraryWithOneMockBook = new Library(mockPrintStream, bookList, stubMovieList);
+        appWithMockBook = new BibliotecaApp(libraryWithOneMockBook, mockBufferedReader, mockBibliotecaAppView);
+
+        ArrayList<Book> booklist2 = new ArrayList<Book>();
+        mockBook2 = mock(Book.class);
+        booklist2.add(mockBook);
+        booklist2.add(mockBook2);
+        Library libraryWithTwoMockBooks = new Library(mockPrintStream, booklist2, stubMovieList);
+        appWithTwoMockBooks = new BibliotecaApp(libraryWithTwoMockBooks, mockBufferedReader, mockBibliotecaAppView);
+
+        outputStream = new ByteArrayOutputStream();
+        PrintStream printStream = new PrintStream(outputStream);
+        bibliotecaAppView = new BibliotecaAppView(printStream);
+        appWithRealBibliotecaView = new BibliotecaApp(libraryWithTwoMockBooks, mockBufferedReader, bibliotecaAppView);
+
+        ArrayList<Movie> movieListWithTwilight = new ArrayList<Movie>();
+        twilight = new Movie("Twilight", "some person", "2010", 2);
+        movieListWithTwilight.add(twilight);
+        ArrayList<Book> stubBookList = new ArrayList<Book>();
+        Library libraryWithTwilight = new Library(mockPrintStream, stubBookList, movieListWithTwilight);
+        appWithTwilightInLibrary = new BibliotecaApp(libraryWithTwilight, mockBufferedReader,mockBibliotecaAppView);
+
+        ArrayList<Movie> movieListWithMockMovie = new ArrayList<Movie>();
+        mockMovie = mock(Movie.class);
+        Library libraryWithOneMockMovie = new Library(mockPrintStream, stubBookList, movieListWithMockMovie);
+        appWithMockMovie = new BibliotecaApp(libraryWithOneMockMovie, mockBufferedReader, mockBibliotecaAppView);
 
     }
 
     @Test
     public void shouldSeeWelcomeMessageWhenAppStarts() throws IOException {
-        when(bufferedReader.readLine()).thenReturn("1").thenReturn("q");
-        app.start();
-        verify(mockBibliotecaAppView).displayWelcomeMessage();
+        when(mockBufferedReader.readLine()).thenReturn("1").thenReturn("q");
+        realAppWithMockParameters.start();
+        verify(mockBibliotecaAppView, times(1)).displayWelcomeMessage();
     }
 
     @Test
     public void shouldDisplayOptionsAfterWelcomeMessage() throws IOException {
-        when(bufferedReader.readLine()).thenReturn("1").thenReturn("q");
-        app.start();
-        verify(mockBibliotecaAppView).displayOptionMenu();
+        when(mockBufferedReader.readLine()).thenReturn("q");
+        realAppWithMockParameters.start();
+        verify(mockBibliotecaAppView, atLeastOnce()).displayOptionMenu();
     }
 
 
@@ -52,18 +105,8 @@ public class BibliotecaAppTest {
 
     @Test
     public void shouldPrintOneBookWhenOption1IsSelectedAndThereIsOneBookInTheLibrary() throws IOException {
-        // make app with library with one mock book in it
-
-        ArrayList<Book> bookList = new ArrayList<Book>();
-        Book mockBook = mock(Book.class);
-        bookList.add(mockBook);
-        Library libWithMockBook = new Library(mockPrintStream, bookList);
-        OutputStream mockOutputStream = mock(OutputStream.class);
-        app = new BibliotecaApp(libWithMockBook, mockOutputStream, mockPrintStream, bufferedReader, mockBibliotecaAppView);
-
-        // Choose option 1
-        when(bufferedReader.readLine()).thenReturn("1").thenReturn("q");
-        app.start();
+        when(mockBufferedReader.readLine()).thenReturn("1").thenReturn("q");
+        appWithMockBook.start();
 
         // check if print book is called on mock book one time
         verify(mockBook).printBook(mockPrintStream);
@@ -72,20 +115,8 @@ public class BibliotecaAppTest {
 
     @Test
     public void shouldPrintTwoBooksWhenOption1IsSelectedAndThereAreTwoBooksInTheLibrary() throws IOException {
-        // make app with library with one mock book in it
-
-        ArrayList<Book> bookList = new ArrayList<Book>();
-        Book mockBook = mock(Book.class);
-        Book mockBook2 = mock(Book.class);
-        bookList.add(mockBook);
-        bookList.add(mockBook2);
-        Library libWithMockBook = new Library(mockPrintStream, bookList);
-        OutputStream mockOutputStream = mock(OutputStream.class);
-        app = new BibliotecaApp(libWithMockBook, mockOutputStream, mockPrintStream, bufferedReader, mockBibliotecaAppView);
-
-        // Choose option 1
-        when(bufferedReader.readLine()).thenReturn("1").thenReturn("q");
-        app.start();
+        when(mockBufferedReader.readLine()).thenReturn("1").thenReturn("q");
+        appWithTwoMockBooks.start();
 
         // check if print book is called on mock book one time
         verify(mockBook, times(1)).printBook(mockPrintStream);
@@ -110,47 +141,122 @@ public class BibliotecaAppTest {
 
 
     @Test
-    public void shouldDisplayWhen1IsSelectedFromOptions() throws IOException {
-        BufferedReader bufferedReader = mock(BufferedReader.class);
-        PrintStream mockPrintStream = mock(PrintStream.class);
-        OutputStream mockOutputStream = mock(OutputStream.class);
-        Library mockLibrary = mock(Library.class);
-        BibliotecaAppView mockBibliotecaAppView = mock(BibliotecaAppView.class);
-        BibliotecaApp app = new BibliotecaApp(mockLibrary, mockOutputStream, mockPrintStream, bufferedReader, mockBibliotecaAppView);
-
-        when(bufferedReader.readLine()).thenReturn("1").thenReturn("q");
-
-        app.start();
+    public void shouldDisplayBookListWhen1IsSelectedFromOptions() throws IOException {
+        when(mockBufferedReader.readLine()).thenReturn("1").thenReturn("q");
+        realAppWithMockParameters.start();
         verify(mockLibrary).printBooklist();
     }
 
     @Test
-    public void shouldInformUserOfInValidInputWhenInputIsNot1() throws IOException {
-        BufferedReader bufferedReader = mock(BufferedReader.class);
-        PrintStream mockPrintStream = mock(PrintStream.class);
-        OutputStream mockOutputStream = mock(OutputStream.class);
-        Library mockLibrary = mock(Library.class);
-        BibliotecaAppView mockBibliotecaAppView = mock(BibliotecaAppView.class);
-        BibliotecaApp app = new BibliotecaApp(mockLibrary, mockOutputStream, mockPrintStream, bufferedReader, mockBibliotecaAppView);
-
-        when(bufferedReader.readLine()).thenReturn("2").thenReturn("1").thenReturn("q");
-
-        app.start();
+    public void shouldInformUserOfInValidInputWhenInputIsNotValidMenuOption() throws IOException {
+        when(mockBufferedReader.readLine()).thenReturn("Not A Valid Option").thenReturn("q");
+        realAppWithMockParameters.start();
         verify(mockBibliotecaAppView, atLeastOnce()).printInvalidInputMessage();
     }
     @Test
     public void shouldQuitApplicationWhenUserInputsQFromOptionMenu() throws IOException {
-        BufferedReader bufferedReader = mock(BufferedReader.class);
-        PrintStream mockPrintStream = mock(PrintStream.class);
-        OutputStream mockOutputStream = mock(OutputStream.class);
-        Library mockLibrary = mock(Library.class);
-        BibliotecaAppView mockBibliotecaAppView = mock(BibliotecaAppView.class);
-        BibliotecaApp app = new BibliotecaApp(mockLibrary, mockOutputStream, mockPrintStream, bufferedReader, mockBibliotecaAppView);
-
-        when(bufferedReader.readLine()).thenReturn("q");
-
-        app.start();
-
+        when(mockBufferedReader.readLine()).thenReturn("q");
+        realAppWithMockParameters.start();
         verify(mockBibliotecaAppView).showQuitMessage();
+    }
+
+    @Test
+    public void shouldDisplayUserOptionToCheckOutBookInMenu() throws IOException {
+        when(mockBufferedReader.readLine()).thenReturn("q");
+        appWithRealBibliotecaView.start();
+        String output = outputStream.toString();
+        assertThat(output, containsString("1 - List of Books"));
+        assertThat(output, containsString("2 - Checkout Book"));
+        assertThat(output, containsString("3 - Return Book"));
+        assertThat(output, containsString("4 - List of Movies"));
+        assertThat(output, containsString("5 - Checkout Movie"));
+        assertThat(output, containsString("q - Leave the Library"));
+    }
+
+    @Test
+    public void shouldPromptUserToEnterABookTitleWhenOption2FromMenuIsSelected() throws IOException {
+        when(mockBufferedReader.readLine()).thenReturn("2").thenReturn("q");
+        realAppWithMockParameters.start();
+        verify(mockBibliotecaAppView).displayCheckOutBookInstructions();
+
+    }
+
+    // QUESTION: should everything that can possibly be a mock be made one?
+    // Protocol on writing a test that cannot compile?
+    // Should this actually test if the code correctly notifies the user?
+    @Test
+    public void shouldCheckOutBookWithNotificationToUserIfUserSuccessfullyChecksOutBook() throws IOException {
+        when(mockBufferedReader.readLine()).thenReturn("2").thenReturn("Beloved").thenReturn("q");
+        appWithBelovedInLibrary.start();
+        assertTrue(beloved.getIsCheckedOut());
+        verify(mockBibliotecaAppView).displayCheckOutBookSuccessful();
+    }
+
+    // Question: is it better to write a test for the behavior of what the user should interact with (actual text) or mocks (test behavior more)
+    @Test
+    public void shouldDisplayErrorMessageIfUserInputsBookTitleToCheckOutThatIsNotAvailable() throws IOException {
+        when(mockBufferedReader.readLine()).thenReturn("2").thenReturn("Another Book").thenReturn("q");
+        appWithBelovedInLibrary.start();
+        verify(mockBibliotecaAppView).displayCheckOutBookNotSuccessful();
+    }
+
+    @Test
+    public void shouldNotCallPrintBookInPrintBookListMethodOnBookWhenBookIsCheckedOut() throws IOException {
+        when(mockBook.getIsCheckedOut()).thenReturn(true);
+        when(mockBufferedReader.readLine()).thenReturn("1").thenReturn("q");
+        appWithMockBook.start();
+        verify(mockBook, never()).printBook(mockPrintStream); // must never be called
+   }
+
+    @Test
+    public void shouldPromptUserToEnterABookTitleWhenOption3FromMenuIsSelected() throws IOException {
+        when(mockBufferedReader.readLine()).thenReturn("3").thenReturn("Some Title").thenReturn("q");
+        realAppWithMockParameters.start();
+        verify(mockBibliotecaAppView).displayReturnBookInstructions();
+    }
+
+    @Test
+    public void shouldReturnBookWithNotificationToUserIfUserSuccessfullyReturnsBook() throws IOException {
+        when(mockBufferedReader.readLine()).thenReturn("3").thenReturn("Beloved").thenReturn("q");
+        appWithBelovedInLibrary.start();
+        String output = outputStream.toString();
+
+        // Successfully returns book
+        assertFalse(beloved.getIsCheckedOut());
+
+        // Successfully Notifies User
+        verify(mockBibliotecaAppView).displayReturnBookSuccessful();
+    }
+
+
+    // BEGIN TESTS FOR MOVIES
+
+    @Test
+    public void shouldDisplayPrintMoviesWhenUserEntersOption4AtTheMenu() throws IOException {
+        when(mockBufferedReader.readLine()).thenReturn("4").thenReturn("q");
+        realAppWithMockParameters.start();
+        verify(mockLibrary).printMovieList();
+    }
+
+    @Test
+    public void shouldCheckOutBookWithNotificationToUserIfUserChecksOutBook() throws IOException {
+        when(mockBufferedReader.readLine()).thenReturn("5").thenReturn("Twilight").thenReturn("q");
+        appWithTwilightInLibrary.start();
+        assertTrue(twilight.getIsCheckedOut());
+        verify(mockBibliotecaAppView).displayCheckOutMovieSuccessful();
+    }
+    @Test
+    public void shouldDisplayErrorMessageIfUserInputsMovieTitleToCheckOutThatIsNotAvailable() throws IOException {
+        when(mockBufferedReader.readLine()).thenReturn("5").thenReturn("Another Movie").thenReturn("q");
+        appWithTwilightInLibrary.start();
+        verify(mockBibliotecaAppView).displayCheckOutMovieNotSuccessful();
+    }
+
+    @Test
+    public void shouldNotCallPrintMovieInPrintMovieListMethodOnBookWhenBookIsCheckedOut() throws IOException {
+        when(mockMovie.getIsCheckedOut()).thenReturn(true);
+        when(mockBufferedReader.readLine()).thenReturn("5").thenReturn("q");
+        appWithMockMovie.start();
+        verify(mockMovie, never()).printMovie(mockPrintStream); // must never be called
     }
 }
