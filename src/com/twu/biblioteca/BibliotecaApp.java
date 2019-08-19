@@ -53,13 +53,17 @@ public class BibliotecaApp {
                 library.printBooklist();
                 choice = getUserInput().toLowerCase();
             }
+            if (choice.equals("2")){
+                bibliotecaAppView.displayCheckOutBookInstructions();
+                choice = getUserInput().toLowerCase();
+            }
             else if(choice.equals("q")){
                 bibliotecaAppView.showQuitMessage();
                 running = false;
             }
             else{
                 bibliotecaAppView.printInvalidInputMessage();
-                bibliotecaAppView.displayWelcomeMessage();
+                bibliotecaAppView.displayOptionMenu();
                 choice = getUserInput().toLowerCase();
             }
         }

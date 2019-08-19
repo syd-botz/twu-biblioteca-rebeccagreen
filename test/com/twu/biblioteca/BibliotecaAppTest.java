@@ -179,13 +179,28 @@ public class BibliotecaAppTest {
     }
 
     @Test
-    public void shouldPromptUserToEnterABookTitleWhenOption2FromMenuIsSelected(){
+    public void shouldPromptUserToEnterABookTitleWhenOption2FromMenuIsSelected() throws IOException {
+        ArrayList<Book> bookList = new ArrayList<Book>();
 
+        BufferedReader bufferedReader = mock(BufferedReader.class);
+        ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
+        PrintStream printStream = new PrintStream(byteOutputStream);
+        BibliotecaAppView bibliotecaAppView = new BibliotecaAppView(printStream);
+        Library lib = new Library(printStream, bookList);
+        BibliotecaApp app = new BibliotecaApp(lib, byteOutputStream, printStream, bufferedReader, bibliotecaAppView);
+
+        when(bufferedReader.readLine()).thenReturn("2").thenReturn("q");
+
+        app.start();
+
+        String output = byteOutputStream.toString();
+        assertThat(output, containsString("Please Enter The Title of the Book To Checkout: "));
     }
-    
-    // Ready to Implement
+
+    // QUESTION: should everything that can possibly be a mock be made one?
+    // Protocol on writing a test that cannot compile?
     @Test
-    public void shouldSetCheckoutToTrueWhenUserTypes1984WhenPromptedToCheckOutBook() throws IOException {
+    public void shouldSetCheckoutToTrueWhenUserTypesBelovedWhenPromptedToCheckOutBook() throws IOException {
         ArrayList<Book> bookList = new ArrayList<Book>();
         Book beloved = new Book("Beloved", "Toni Morrison", "2010");
         bookList.add(beloved);
@@ -231,11 +246,6 @@ public class BibliotecaAppTest {
 
         verify(mockCheckedInBook, times(0)).printBook(mockPrintStream);
         verify(mockCheckedOutBook, times(1)).printBook(mockPrintStream);
-    }
-
-    @Test
-    public void shouldReturnCheckoutAsTrueForBook1984WhenUserTypes1984AsBookToCheckout(){
-
     }
 
 }
