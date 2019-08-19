@@ -6,6 +6,7 @@ import org.junit.Test;
 import java.io.*;
 import java.util.ArrayList;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.*;
@@ -199,6 +200,7 @@ public class BibliotecaAppTest {
 
     // QUESTION: should everything that can possibly be a mock be made one?
     // Protocol on writing a test that cannot compile?
+    // Should this actually test if the code correctly notifies the user?
     @Test
     public void shouldSetCheckoutToTrueWhenUserTypesBelovedWhenPromptedToCheckOutBook() throws IOException {
         ArrayList<Book> bookList = new ArrayList<Book>();
@@ -216,7 +218,12 @@ public class BibliotecaAppTest {
 
         app.start();
 
-//        assertThat(beloved.isCheckedOut(), is(true));
+       assertTrue(beloved.getIsCheckedOut());
+    }
+
+    @Test
+    public void shouldDisplayErrorMessageIfUserInputsTitleToCheckOutThatIsNotAvailable(){
+
     }
 
     // EDIT AFTER ABOVE TEST RUNS
@@ -234,9 +241,9 @@ public class BibliotecaAppTest {
         app = new BibliotecaApp(libWithMockBook, mockOutputStream, mockPrintStream, bufferedReader, mockBibliotecaAppView);
 
         // check in checkedin book
-//        when(mockCheckedInBook.isCheckedOut()).thenReturn(false);
+        when(mockCheckedInBook.getIsCheckedOut()).thenReturn(false);
         // check out checkedout book
-//        when(mockCheckedInBook.isCheckedOut()).thenReturn(true);
+        when(mockCheckedInBook.getIsCheckedOut()).thenReturn(true);
 
         // NEED TO EDIT THIS LINE SO THAT USER INPUT IS THE MOCK BOOK
         // Choose option 2 - CheckoutBooks

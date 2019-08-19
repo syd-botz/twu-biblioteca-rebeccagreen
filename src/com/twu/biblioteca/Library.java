@@ -28,4 +28,13 @@ public class Library {
     }
 
 
+    public Boolean checkOut(String bookToCheckOutTitle) {
+        for (Book book : bookList){
+            if (book.getTitle().toLowerCase().equals(bookToCheckOutTitle)){
+                book.checkOutBook();
+                return true;
+            }
+        }
+        return false;
+    }
 }

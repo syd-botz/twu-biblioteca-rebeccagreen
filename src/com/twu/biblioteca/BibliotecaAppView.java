@@ -32,4 +32,8 @@ public class BibliotecaAppView {
     public void displayCheckOutBookInstructions() {
         printStream.println("Please Enter The Title of the Book To Checkout: ");
     }
+
+    public void displayCheckOutBookSuccessful(){
+
+    }
 }

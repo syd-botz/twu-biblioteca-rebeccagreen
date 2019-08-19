@@ -48,6 +48,7 @@ public class BibliotecaApp {
         Boolean running = true;
         String choice = getUserInput();
 
+        // This should be refactored into smaller methods
         while (running){
             if (choice.equals("1")){
                 library.printBooklist();
@@ -55,6 +56,9 @@ public class BibliotecaApp {
             }
             if (choice.equals("2")){
                 bibliotecaAppView.displayCheckOutBookInstructions();
+                String bookToCheckOutTitle = getUserInput().toLowerCase();
+                Boolean isBookSuccessfullyCheckedOut = library.checkOut(bookToCheckOutTitle);
+                bibliotecaAppView.displayOptionMenu();
                 choice = getUserInput().toLowerCase();
             }
             else if(choice.equals("q")){
