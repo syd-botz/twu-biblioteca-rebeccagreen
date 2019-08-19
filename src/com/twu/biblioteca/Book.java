@@ -40,7 +40,7 @@ public class Book {
         this.isCheckedOut = false;
     }
 
-// To Do : Make into Book View Class
+//  Refactor Idea -- Make Book printing logic into its own class (BookView)
     public void printBook(PrintStream printStream){
         printStream.println(this.getTitle() + " " + this.getAuthor() + " in " + this.getYear());
 

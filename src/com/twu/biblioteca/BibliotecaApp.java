@@ -6,19 +6,18 @@ import java.util.ArrayList;
 public class BibliotecaApp {
 
     private final BufferedReader reader;
-    private OutputStream outputStream;
+//    private OutputStream outputStream;
     private Library library;
-    private PrintStream printStream;
+//    private PrintStream printStream;
     private BibliotecaAppView bibliotecaAppView;
     private Boolean running;
 
 
-
-    public BibliotecaApp(Library library, OutputStream outputStream, PrintStream printStream, BufferedReader reader,
-                         BibliotecaAppView bibliotecaAppView) {
-        this.outputStream = outputStream;
+// Refactor idea -- take out printstream and outputstream from this class (will that mess up my tests?)
+    public BibliotecaApp(Library library, BufferedReader reader, BibliotecaAppView bibliotecaAppView) {
+//        this.outputStream = outputStream;
         this.library = library;
-        this.printStream = printStream;
+//        this.printStream = printStream;
         this.reader = reader;
         this.bibliotecaAppView = bibliotecaAppView;
         this.running = true;
@@ -31,12 +30,12 @@ public class BibliotecaApp {
         bookList.add(new Book("Beloved", "Toni Morrison", "2005"));
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
+//        ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(System.out);
         BibliotecaAppView bibliotecaAppView = new BibliotecaAppView(printStream);
 
         Library lib = new Library(printStream, bookList);
-        BibliotecaApp app = new BibliotecaApp(lib, byteOutputStream, printStream, reader, bibliotecaAppView);
+        BibliotecaApp app = new BibliotecaApp(lib, reader, bibliotecaAppView);
 
         app.start();
     }
@@ -55,27 +54,11 @@ public class BibliotecaApp {
             return getUserOptionChoice();
         }
         else if (choice.equals("2")){
-//            bibliotecaAppView.displayCheckOutBookInstructions();
-//            String bookToCheckOutTitle = getUserTitleInput();
-//            Boolean isBookSuccessfullyCheckedOut = library.checkOut(bookToCheckOutTitle);
-//            if (isBookSuccessfullyCheckedOut) {
-//                bibliotecaAppView.displayCheckOutBookSuccessful();
-//            }
-//            else {
-//                bibliotecaAppView.displayCheckOutBookNotSuccessful();
-//            }
             instructUserToCheckOutBook();
             return getUserOptionChoice();
         }
         else if (choice.equals("3")){
-            bibliotecaAppView.displayReturnBookInstructions();
-            String bookToReturnTitle = getUserTitleInput();
-            Boolean isBookSuccessfullyReturned = library.returnBook(bookToReturnTitle);
-            if (isBookSuccessfullyReturned){
-                bibliotecaAppView.displayReturnBookSuccessful();
-            }else{
-                bibliotecaAppView.displayReturnBookNotSuccessful();
-            }
+            instructUserToReturnBook();
             return getUserOptionChoice();
         }
         else if(choice.equals("q")){
@@ -107,6 +90,17 @@ public class BibliotecaApp {
         }
         else {
             bibliotecaAppView.displayCheckOutBookNotSuccessful();
+        }
+    }
+
+    private void instructUserToReturnBook() throws IOException {
+        bibliotecaAppView.displayReturnBookInstructions();
+        String bookToReturnTitle = getUserTitleInput();
+        Boolean isBookSuccessfullyReturned = library.returnBook(bookToReturnTitle);
+        if (isBookSuccessfullyReturned){
+            bibliotecaAppView.displayReturnBookSuccessful();
+        }else{
+            bibliotecaAppView.displayReturnBookNotSuccessful();
         }
     }
 }

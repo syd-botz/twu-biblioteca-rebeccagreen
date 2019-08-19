@@ -28,7 +28,7 @@ public class BibliotecaAppTest {
         OutputStream mockOutputStream = mock(OutputStream.class);
         mockLibrary = mock(Library.class);
         mockBibliotecaAppView = mock(BibliotecaAppView.class);
-        app = new BibliotecaApp(mockLibrary, mockOutputStream, mockPrintStream, bufferedReader, mockBibliotecaAppView);
+        app = new BibliotecaApp(mockLibrary, bufferedReader, mockBibliotecaAppView);
 
     }
 
@@ -36,12 +36,12 @@ public class BibliotecaAppTest {
     public void shouldSeeWelcomeMessageWhenAppStarts() throws IOException {
         when(bufferedReader.readLine()).thenReturn("1").thenReturn("q");
         app.start();
-        verify(mockBibliotecaAppView).displayWelcomeMessage();
+        verify(mockBibliotecaAppView, times(1)).displayWelcomeMessage();
     }
 
     @Test
     public void shouldDisplayOptionsAfterWelcomeMessage() throws IOException {
-        when(bufferedReader.readLine()).thenReturn("1").thenReturn("q");
+        when(bufferedReader.readLine()).thenReturn("q");
         app.start();
         verify(mockBibliotecaAppView, atLeastOnce()).displayOptionMenu();
     }
@@ -64,7 +64,7 @@ public class BibliotecaAppTest {
         bookList.add(mockBook);
         Library libWithMockBook = new Library(mockPrintStream, bookList);
         OutputStream mockOutputStream = mock(OutputStream.class);
-        app = new BibliotecaApp(libWithMockBook, mockOutputStream, mockPrintStream, bufferedReader, mockBibliotecaAppView);
+        app = new BibliotecaApp(libWithMockBook, bufferedReader, mockBibliotecaAppView);
 
         // Choose option 1
         when(bufferedReader.readLine()).thenReturn("1").thenReturn("q");
@@ -86,7 +86,7 @@ public class BibliotecaAppTest {
         bookList.add(mockBook2);
         Library libWithMockBook = new Library(mockPrintStream, bookList);
         OutputStream mockOutputStream = mock(OutputStream.class);
-        app = new BibliotecaApp(libWithMockBook, mockOutputStream, mockPrintStream, bufferedReader, mockBibliotecaAppView);
+        app = new BibliotecaApp(libWithMockBook, bufferedReader, mockBibliotecaAppView);
 
         // Choose option 1
         when(bufferedReader.readLine()).thenReturn("1").thenReturn("q");
@@ -121,7 +121,7 @@ public class BibliotecaAppTest {
         OutputStream mockOutputStream = mock(OutputStream.class);
         Library mockLibrary = mock(Library.class);
         BibliotecaAppView mockBibliotecaAppView = mock(BibliotecaAppView.class);
-        BibliotecaApp app = new BibliotecaApp(mockLibrary, mockOutputStream, mockPrintStream, bufferedReader, mockBibliotecaAppView);
+        BibliotecaApp app = new BibliotecaApp(mockLibrary, bufferedReader, mockBibliotecaAppView);
 
         when(bufferedReader.readLine()).thenReturn("1").thenReturn("q");
 
@@ -136,7 +136,7 @@ public class BibliotecaAppTest {
         OutputStream mockOutputStream = mock(OutputStream.class);
         Library mockLibrary = mock(Library.class);
         BibliotecaAppView mockBibliotecaAppView = mock(BibliotecaAppView.class);
-        BibliotecaApp app = new BibliotecaApp(mockLibrary, mockOutputStream, mockPrintStream, bufferedReader, mockBibliotecaAppView);
+        BibliotecaApp app = new BibliotecaApp(mockLibrary, bufferedReader, mockBibliotecaAppView);
 
         when(bufferedReader.readLine()).thenReturn("Not A Valid Option").thenReturn("q");
 
@@ -150,7 +150,7 @@ public class BibliotecaAppTest {
         OutputStream mockOutputStream = mock(OutputStream.class);
         Library mockLibrary = mock(Library.class);
         BibliotecaAppView mockBibliotecaAppView = mock(BibliotecaAppView.class);
-        BibliotecaApp app = new BibliotecaApp(mockLibrary, mockOutputStream, mockPrintStream, bufferedReader, mockBibliotecaAppView);
+        BibliotecaApp app = new BibliotecaApp(mockLibrary, bufferedReader, mockBibliotecaAppView);
 
         when(bufferedReader.readLine()).thenReturn("q");
 
@@ -169,7 +169,7 @@ public class BibliotecaAppTest {
         PrintStream printStream = new PrintStream(byteOutputStream);
         BibliotecaAppView bibliotecaAppView = new BibliotecaAppView(printStream);
         Library lib = new Library(printStream, bookList);
-        BibliotecaApp app = new BibliotecaApp(lib, byteOutputStream, printStream, bufferedReader, bibliotecaAppView);
+        BibliotecaApp app = new BibliotecaApp(lib, bufferedReader, bibliotecaAppView);
 
         when(bufferedReader.readLine()).thenReturn("q");
 
@@ -188,7 +188,7 @@ public class BibliotecaAppTest {
         PrintStream printStream = new PrintStream(byteOutputStream);
         BibliotecaAppView bibliotecaAppView = new BibliotecaAppView(printStream);
         Library lib = new Library(printStream, bookList);
-        BibliotecaApp app = new BibliotecaApp(lib, byteOutputStream, printStream, bufferedReader, bibliotecaAppView);
+        BibliotecaApp app = new BibliotecaApp(lib, bufferedReader, bibliotecaAppView);
 
         when(bufferedReader.readLine()).thenReturn("2").thenReturn("q");
 
@@ -213,7 +213,7 @@ public class BibliotecaAppTest {
         PrintStream printStream = new PrintStream(byteOutputStream);
         BibliotecaAppView bibliotecaAppView = new BibliotecaAppView(printStream);
         Library lib = new Library(printStream, bookList);
-        BibliotecaApp app = new BibliotecaApp(lib, byteOutputStream, printStream, bufferedReader, bibliotecaAppView);
+        BibliotecaApp app = new BibliotecaApp(lib, bufferedReader, bibliotecaAppView);
 
         when(bufferedReader.readLine()).thenReturn("2").thenReturn("Beloved").thenReturn("q");
 
@@ -238,7 +238,7 @@ public class BibliotecaAppTest {
         PrintStream printStream = new PrintStream(byteOutputStream);
         BibliotecaAppView bibliotecaAppView = new BibliotecaAppView(printStream);
         Library lib = new Library(printStream, bookList);
-        BibliotecaApp app = new BibliotecaApp(lib, byteOutputStream, printStream, bufferedReader, bibliotecaAppView);
+        BibliotecaApp app = new BibliotecaApp(lib, bufferedReader, bibliotecaAppView);
 
         when(bufferedReader.readLine()).thenReturn("2").thenReturn("Another Book").thenReturn("q");
 
@@ -257,7 +257,7 @@ public class BibliotecaAppTest {
         bookList.add(mockCheckedOutBook);
         Library lib = new Library(mockPrintStream, bookList);
         OutputStream mockOutputStream = mock(OutputStream.class);
-        app = new BibliotecaApp(lib, mockOutputStream, mockPrintStream, bufferedReader, mockBibliotecaAppView);
+        app = new BibliotecaApp(lib, bufferedReader, mockBibliotecaAppView);
 
         when(mockCheckedOutBook.getIsCheckedOut()).thenReturn(true);
 
@@ -277,7 +277,7 @@ public class BibliotecaAppTest {
         PrintStream printStream = new PrintStream(byteOutputStream);
         BibliotecaAppView bibliotecaAppView = new BibliotecaAppView(printStream);
         Library lib = new Library(printStream, bookList);
-        BibliotecaApp app = new BibliotecaApp(lib, byteOutputStream, printStream, bufferedReader, bibliotecaAppView);
+        BibliotecaApp app = new BibliotecaApp(lib, bufferedReader, bibliotecaAppView);
 
         when(bufferedReader.readLine()).thenReturn("q");
 
@@ -294,7 +294,7 @@ public class BibliotecaAppTest {
         OutputStream mockOutputStream = mock(OutputStream.class);
         Library mockLibrary = mock(Library.class);
         BibliotecaAppView mockBibliotecaAppView = mock(BibliotecaAppView.class);
-        BibliotecaApp app = new BibliotecaApp(mockLibrary, mockOutputStream, mockPrintStream, bufferedReader, mockBibliotecaAppView);
+        BibliotecaApp app = new BibliotecaApp(mockLibrary, bufferedReader, mockBibliotecaAppView);
 
         when(bufferedReader.readLine()).thenReturn("3").thenReturn("Some Title").thenReturn("q");
 
@@ -315,7 +315,7 @@ public class BibliotecaAppTest {
         PrintStream printStream = new PrintStream(byteOutputStream);
         BibliotecaAppView bibliotecaAppView = new BibliotecaAppView(printStream);
         Library lib = new Library(printStream, bookList);
-        BibliotecaApp app = new BibliotecaApp(lib, byteOutputStream, printStream, bufferedReader, bibliotecaAppView);
+        BibliotecaApp app = new BibliotecaApp(lib, bufferedReader, bibliotecaAppView);
 
         when(bufferedReader.readLine()).thenReturn("3").thenReturn("Beloved").thenReturn("q");
 
