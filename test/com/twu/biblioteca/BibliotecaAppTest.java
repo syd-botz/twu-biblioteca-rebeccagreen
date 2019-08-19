@@ -285,4 +285,42 @@ public class BibliotecaAppTest {
 
         verify(mockCheckedOutBook, never()).printBook(mockPrintStream); // must never be called
    }
+
+    @Test
+    public void shouldDisplayUserOptionToReturnBookInMenu() throws IOException {
+        ArrayList<Book> bookList = new ArrayList<Book>();
+
+        BufferedReader bufferedReader = mock(BufferedReader.class);
+        ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
+        PrintStream printStream = new PrintStream(byteOutputStream);
+        BibliotecaAppView bibliotecaAppView = new BibliotecaAppView(printStream);
+        Library lib = new Library(printStream, bookList);
+        BibliotecaApp app = new BibliotecaApp(lib, byteOutputStream, printStream, bufferedReader, bibliotecaAppView);
+
+        when(bufferedReader.readLine()).thenReturn("q");
+
+        app.start();
+
+        String output = byteOutputStream.toString();
+        assertThat(output, containsString("3 - Return Book"));
+    }
+
+    @Test
+    public void shouldPromptUserToEnterABookTitleWhenOption3FromMenuIsSelected() throws IOException {
+        ArrayList<Book> bookList = new ArrayList<Book>();
+
+        BufferedReader bufferedReader = mock(BufferedReader.class);
+        ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
+        PrintStream printStream = new PrintStream(byteOutputStream);
+        BibliotecaAppView bibliotecaAppView = new BibliotecaAppView(printStream);
+        Library lib = new Library(printStream, bookList);
+        BibliotecaApp app = new BibliotecaApp(lib, byteOutputStream, printStream, bufferedReader, bibliotecaAppView);
+
+        when(bufferedReader.readLine()).thenReturn("2").thenReturn("q");
+
+        app.start();
+
+        String output = byteOutputStream.toString();
+        assertThat(output, containsString("Please Enter The Title of the Book To Return: "));
+    }
 }
