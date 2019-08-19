@@ -6,18 +6,12 @@ import java.util.ArrayList;
 public class BibliotecaApp {
 
     private final BufferedReader reader;
-//    private OutputStream outputStream;
     private Library library;
-//    private PrintStream printStream;
     private BibliotecaAppView bibliotecaAppView;
     private Boolean running;
 
-
-// Refactor idea -- take out printstream and outputstream from this class (will that mess up my tests?)
     public BibliotecaApp(Library library, BufferedReader reader, BibliotecaAppView bibliotecaAppView) {
-//        this.outputStream = outputStream;
         this.library = library;
-//        this.printStream = printStream;
         this.reader = reader;
         this.bibliotecaAppView = bibliotecaAppView;
         this.running = true;
@@ -30,7 +24,6 @@ public class BibliotecaApp {
         bookList.add(new Book("Beloved", "Toni Morrison", "2005"));
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-//        ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(System.out);
         BibliotecaAppView bibliotecaAppView = new BibliotecaAppView(printStream);
 
