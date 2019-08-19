@@ -7,11 +7,13 @@ public class Library {
 
     private PrintStream printStream;
     private ArrayList<Book> bookList;
+    private ArrayList<Movie> movieList;
 
-    public Library(PrintStream printStream, ArrayList<Book> bookList) {
+    public Library(PrintStream printStream, ArrayList<Book> bookList, ArrayList<Movie> movieList) {
 
         this.printStream = printStream;
         this.bookList = bookList;
+        this.movieList = movieList;
     }
 
     private Book isTitleInBookList(String bookTitle){
@@ -27,6 +29,14 @@ public class Library {
         for (Book book : bookList){
             if (!book.getIsCheckedOut()) {
                 book.printBook(printStream);
+            }
+        }
+    }
+
+    public void printMovieList() {
+        for (Movie movie: movieList){
+            if (!movie.getIsCheckedOut()) {
+                movie.printMovie(printStream);
             }
         }
     }
@@ -48,4 +58,6 @@ public class Library {
         }
         return false;
     }
+
+
 }

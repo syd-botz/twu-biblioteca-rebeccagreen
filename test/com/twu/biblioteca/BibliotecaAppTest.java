@@ -40,20 +40,21 @@ public class BibliotecaAppTest {
         ArrayList<Book> belovedBookList = new ArrayList<Book>();
         beloved = new Book("Beloved", "Toni Morrison", "2010");
         belovedBookList.add(beloved);
-        Library libraryWithBeloved = new Library(mockPrintStream, belovedBookList);
+        ArrayList<Movie> stubMovieList = new ArrayList<Movie>();
+        Library libraryWithBeloved = new Library(mockPrintStream, belovedBookList, stubMovieList);
         appWithBelovedInLibrary = new BibliotecaApp(libraryWithBeloved, mockBufferedReader, mockBibliotecaAppView);
 
         ArrayList<Book> bookList = new ArrayList<Book>();
         mockBook = mock(Book.class);
         bookList.add(mockBook);
-        Library libraryWithOneMockBook = new Library(mockPrintStream, bookList);
+        Library libraryWithOneMockBook = new Library(mockPrintStream, bookList, stubMovieList);
         appWithMockBook = new BibliotecaApp(libraryWithOneMockBook, mockBufferedReader, mockBibliotecaAppView);
 
         ArrayList<Book> booklist2 = new ArrayList<Book>();
         mockBook2 = mock(Book.class);
         booklist2.add(mockBook);
         booklist2.add(mockBook2);
-        Library libraryWithTwoMockBooks = new Library(mockPrintStream, booklist2);
+        Library libraryWithTwoMockBooks = new Library(mockPrintStream, booklist2, stubMovieList);
         appWithTwoMockBooks = new BibliotecaApp(libraryWithTwoMockBooks, mockBufferedReader, mockBibliotecaAppView);
 
         outputStream = new ByteArrayOutputStream();
@@ -152,6 +153,7 @@ public class BibliotecaAppTest {
         assertThat(output, containsString("1 - List of Books"));
         assertThat(output, containsString("2 - Checkout Book"));
         assertThat(output, containsString("3 - Return Book"));
+        assertThat(output, containsString("4 - List of Movies"));
         assertThat(output, containsString("q - Leave the Library"));
     }
 
@@ -208,5 +210,16 @@ public class BibliotecaAppTest {
 
         // Successfully Notifies User
         verify(mockBibliotecaAppView).displayReturnBookSuccessful();
+    }
+
+
+    // BEGIN TESTS FOR MOVIES
+
+
+    @Test
+    public void shouldDisplayPrintMoviesWhenUserEntersOption4AtTheMenu() throws IOException {
+        when(mockBufferedReader.readLine()).thenReturn("4").thenReturn("q");
+        realAppWithMockParameters.start();
+        verify(mockLibrary).printMovieList();
     }
 }

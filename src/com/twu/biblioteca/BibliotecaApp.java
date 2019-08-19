@@ -21,15 +21,19 @@ public class BibliotecaApp {
 
     public static void main(String[] args) throws IOException {
         ArrayList<Book> bookList = new ArrayList<Book>();
+        ArrayList<Movie> movieList = new ArrayList<Movie>();
 
         bookList.add(new Book("1984", "George Orwell", "2010"));
         bookList.add(new Book("Beloved", "Toni Morrison", "2005"));
+
+        movieList.add(new Movie("New Movie","1980", "me",3));
+        movieList.add(new Movie("New Movie 2","1980", "me",3));
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         PrintStream printStream = new PrintStream(System.out);
         BibliotecaAppView bibliotecaAppView = new BibliotecaAppView(printStream);
 
-        Library lib = new Library(printStream, bookList);
+        Library lib = new Library(printStream, bookList, movieList);
         BibliotecaApp app = new BibliotecaApp(lib, reader, bibliotecaAppView);
 
         app.start();
@@ -54,6 +58,10 @@ public class BibliotecaApp {
         }
         else if (choice.equals("3")){
             instructUserToReturnBook();
+            return getUserOptionChoice();
+        }
+        else if (choice.equals("4")){
+            library.printMovieList();
             return getUserOptionChoice();
         }
         else if(choice.equals("q")){
