@@ -41,7 +41,7 @@ public class Library {
         }
     }
 
-    public Boolean checkOut(String bookToCheckOutTitle) {
+    public Boolean checkOutBook(String bookToCheckOutTitle) {
         Book bookToCheckOut = isTitleInBookList(bookToCheckOutTitle);
         if (bookToCheckOut != null){
             bookToCheckOut.checkOutBook();
@@ -60,4 +60,21 @@ public class Library {
     }
 
 
+    public Boolean checkOutMovie(String movieToCheckOutTitle) {
+        Movie movieToCheckOut = isTitleInMovieList(movieToCheckOutTitle);
+        if (movieToCheckOut != null){
+            movieToCheckOut.checkOutMovie();
+            return true;
+        }
+        return false;
+    }
+
+    private Movie isTitleInMovieList(String movieToCheckOutTitle) {
+        for (Movie movie: movieList){
+            if(movie.getTitle().toLowerCase().equals(movieToCheckOutTitle)){
+                return movie;
+            }
+        }
+        return null;
+    }
 }

@@ -7,12 +7,15 @@ public class Movie {
     private String year;
     private String director;
     private Integer rating;
+    private Boolean isCheckedOut;
+
     
     public Movie(String title, String year, String director, Integer rating){
         this.title = title;
         this.year = year;
         this.director = director;
         this.rating = rating;
+        this.isCheckedOut = false;
     }
 
     public Integer getRating() {
@@ -32,7 +35,11 @@ public class Movie {
     }
 
     public boolean getIsCheckedOut() {
-        return false;
+        return this.isCheckedOut;
+    }
+
+    public void checkOutMovie(){
+        this.isCheckedOut = true;
     }
 
     public void printMovie(PrintStream printStream) {

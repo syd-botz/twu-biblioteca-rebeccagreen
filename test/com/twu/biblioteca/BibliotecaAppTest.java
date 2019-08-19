@@ -21,12 +21,14 @@ public class BibliotecaAppTest {
     private BibliotecaAppView bibliotecaAppView;
     private BibliotecaApp realAppWithMockParameters;
     private BibliotecaApp appWithBelovedInLibrary;
+    private BibliotecaApp appWithTwilightInLibrary;
     private BibliotecaApp appWithMockBook;
     private BibliotecaApp appWithTwoMockBooks;
     private BibliotecaApp appWithRealBibliotecaView;
     private Book beloved;
     private Book mockBook;
     private Book mockBook2;
+    private Movie twilight;
 
     @Before
     public void setUp() {
@@ -62,6 +64,12 @@ public class BibliotecaAppTest {
         bibliotecaAppView = new BibliotecaAppView(printStream);
         appWithRealBibliotecaView = new BibliotecaApp(libraryWithTwoMockBooks, mockBufferedReader, bibliotecaAppView);
 
+        ArrayList<Movie> movieListWithTwilight = new ArrayList<Movie>();
+        twilight = new Movie("Twilight", "some person", "2010", 2);
+        movieListWithTwilight.add(twilight);
+        ArrayList<Book> stubBookList = new ArrayList<Book>();
+        Library libraryWithTwilight = new Library(mockPrintStream, stubBookList, movieListWithTwilight);
+        appWithTwilightInLibrary = new BibliotecaApp(libraryWithTwilight, mockBufferedReader,mockBibliotecaAppView);
 
     }
 
@@ -154,6 +162,7 @@ public class BibliotecaAppTest {
         assertThat(output, containsString("2 - Checkout Book"));
         assertThat(output, containsString("3 - Return Book"));
         assertThat(output, containsString("4 - List of Movies"));
+        assertThat(output, containsString("5 - Checkout Movie"));
         assertThat(output, containsString("q - Leave the Library"));
     }
 
@@ -215,11 +224,18 @@ public class BibliotecaAppTest {
 
     // BEGIN TESTS FOR MOVIES
 
-
     @Test
     public void shouldDisplayPrintMoviesWhenUserEntersOption4AtTheMenu() throws IOException {
         when(mockBufferedReader.readLine()).thenReturn("4").thenReturn("q");
         realAppWithMockParameters.start();
         verify(mockLibrary).printMovieList();
+    }
+
+    @Test
+    public void shouldCheckOutBookWithNotificationToUserIfUserChecksOutBook() throws IOException {
+        when(mockBufferedReader.readLine()).thenReturn("5").thenReturn("Twilight").thenReturn("q");
+        appWithTwilightInLibrary.start();
+        assertTrue(twilight.getIsCheckedOut());
+        verify(mockBibliotecaAppView).displayCheckOutMovieSuccessful();
     }
 }

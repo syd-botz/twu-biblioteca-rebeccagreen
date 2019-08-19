@@ -3,8 +3,6 @@ package com.twu.biblioteca;
 import java.io.*;
 import java.util.ArrayList;
 
-// THIS IS MY TEST COMMENT
-
 public class BibliotecaApp {
 
     private final BufferedReader reader;
@@ -63,16 +61,29 @@ public class BibliotecaApp {
         else if (choice.equals("4")){
             library.printMovieList();
             return getUserOptionChoice();
-        }
-        else if(choice.equals("q")){
+        } else if (choice.equals("5")){
+            instructUserToCheckOutMovie();
+            return getUserOptionChoice();
+        } else if (choice.equals("q")) {
             bibliotecaAppView.showQuitMessage();
             running = false;
-        }
-        else{
+        } else {
             bibliotecaAppView.printInvalidInputMessage();
             return getUserOptionChoice();
         }
         return "";
+    }
+
+    private void instructUserToCheckOutMovie() throws IOException {
+        bibliotecaAppView.displayCheckOutMovieInstructions();
+        String movieToCheckOutTitle = getUserTitleInput();
+        Boolean isMovieSuccessfullyCheckedOut = library.checkOutMovie(movieToCheckOutTitle);
+        if (isMovieSuccessfullyCheckedOut){
+            bibliotecaAppView.displayCheckOutMovieSuccessful();
+        }
+        else {
+            bibliotecaAppView.displayCheckOutMovieNotSuccessful();
+        }
     }
 
     private String getUserOptionChoice() throws IOException {
@@ -87,7 +98,7 @@ public class BibliotecaApp {
     private void instructUserToCheckOutBook() throws IOException{
         bibliotecaAppView.displayCheckOutBookInstructions();
         String bookToCheckOutTitle = getUserTitleInput();
-        Boolean isBookSuccessfullyCheckedOut = library.checkOut(bookToCheckOutTitle);
+        Boolean isBookSuccessfullyCheckedOut = library.checkOutBook(bookToCheckOutTitle);
         if (isBookSuccessfullyCheckedOut) {
             bibliotecaAppView.displayCheckOutBookSuccessful();
         }
