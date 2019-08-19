@@ -316,7 +316,7 @@ public class BibliotecaAppTest {
         Library lib = new Library(printStream, bookList);
         BibliotecaApp app = new BibliotecaApp(lib, byteOutputStream, printStream, bufferedReader, bibliotecaAppView);
 
-        when(bufferedReader.readLine()).thenReturn("2").thenReturn("q");
+        when(bufferedReader.readLine()).thenReturn("3").thenReturn("q");
 
         app.start();
 

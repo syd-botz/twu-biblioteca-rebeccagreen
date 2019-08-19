@@ -69,7 +69,9 @@ public class BibliotecaApp {
                 choice = getUserInput().toLowerCase();
             }
             if (choice.equals("3")){
-
+                bibliotecaAppView.displayReturnBookInstructions();
+                bibliotecaAppView.displayOptionMenu();
+                choice = getUserInput().toLowerCase();
             }
             else if(choice.equals("q")){
                 bibliotecaAppView.showQuitMessage();

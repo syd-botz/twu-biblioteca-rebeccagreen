@@ -35,6 +35,10 @@ public class BibliotecaAppView {
         printStream.println("Please Enter The Title of the Book To Checkout: ");
     }
 
+    public void displayReturnBookInstructions() {
+        printStream.println("Please Enter The Title of the Book To Return: ");
+    }
+
     public void displayCheckOutBookSuccessful(){
         printStream.println("Thank you! Enjoy the Book!");
     }
