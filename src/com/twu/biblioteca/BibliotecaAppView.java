@@ -34,6 +34,6 @@ public class BibliotecaAppView {
     }
 
     public void displayCheckOutBookSuccessful(){
-
+        printStream.println("Thank you! Enjoy the Book!");
     }
 }

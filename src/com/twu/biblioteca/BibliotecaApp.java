@@ -58,6 +58,7 @@ public class BibliotecaApp {
                 bibliotecaAppView.displayCheckOutBookInstructions();
                 String bookToCheckOutTitle = getUserInput().toLowerCase();
                 Boolean isBookSuccessfullyCheckedOut = library.checkOut(bookToCheckOutTitle);
+                bibliotecaAppView.displayCheckOutBookSuccessful();
                 bibliotecaAppView.displayOptionMenu();
                 choice = getUserInput().toLowerCase();
             }
