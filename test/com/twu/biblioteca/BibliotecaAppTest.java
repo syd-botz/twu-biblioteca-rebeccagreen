@@ -302,7 +302,7 @@ public class BibliotecaAppTest {
 
         verify(mockBibliotecaAppView).displayReturnBookInstructions();
     }
-    
+
     @Test
     public void shouldReturnBookWithNotificationToUserIfUserSuccessfullyReturnsBook() throws IOException {
         ArrayList<Book> bookList = new ArrayList<Book>();

@@ -42,8 +42,7 @@ public class BibliotecaApp {
 
     public void start() throws IOException {
         bibliotecaAppView.displayWelcomeMessage();
-        bibliotecaAppView.displayOptionMenu();
-        String choice = getUserInput();
+        String choice = getUserOptionChoice();
         while (running) {
             choice = handleUserChoice(choice);
         }
@@ -52,12 +51,11 @@ public class BibliotecaApp {
     private String handleUserChoice(String choice) throws IOException {
         if (choice.equals("1")){
             library.printBooklist();
-            bibliotecaAppView.displayOptionMenu();
-            choice = getUserInput().toLowerCase();
+            return getUserOptionChoice();
         }
-        if (choice.equals("2")){
+        else if (choice.equals("2")){
             bibliotecaAppView.displayCheckOutBookInstructions();
-            String bookToCheckOutTitle = getUserInput().toLowerCase();
+            String bookToCheckOutTitle = getUserTitleInput();
             Boolean isBookSuccessfullyCheckedOut = library.checkOut(bookToCheckOutTitle);
             if (isBookSuccessfullyCheckedOut) {
                 bibliotecaAppView.displayCheckOutBookSuccessful();
@@ -65,20 +63,18 @@ public class BibliotecaApp {
             else {
                 bibliotecaAppView.displayCheckOutBookNotSuccessful();
             }
-            bibliotecaAppView.displayOptionMenu();
-            choice = getUserInput().toLowerCase();
+            return getUserOptionChoice();
         }
-        if (choice.equals("3")){
+        else if (choice.equals("3")){
             bibliotecaAppView.displayReturnBookInstructions();
-            String bookToReturnTitle = getUserInput().toLowerCase();
+            String bookToReturnTitle = getUserTitleInput();
             Boolean isBookSuccessfullyReturned = library.returnBook(bookToReturnTitle);
             if (isBookSuccessfullyReturned){
                 bibliotecaAppView.displayReturnBookSuccessful();
             }else{
                 bibliotecaAppView.displayReturnBookNotSuccessful();
             }
-            bibliotecaAppView.displayOptionMenu();
-            choice = getUserInput().toLowerCase();
+            return getUserOptionChoice();
         }
         else if(choice.equals("q")){
             bibliotecaAppView.showQuitMessage();
@@ -86,15 +82,18 @@ public class BibliotecaApp {
         }
         else{
             bibliotecaAppView.printInvalidInputMessage();
-            bibliotecaAppView.displayOptionMenu();
-            choice = getUserInput().toLowerCase();
-
+            return getUserOptionChoice();
         }
-        return choice;
+        return "";
     }
 
-    private String getUserInput() throws IOException {
-        return reader.readLine();
+    private String getUserOptionChoice() throws IOException {
+        bibliotecaAppView.displayOptionMenu();
+        return reader.readLine().toLowerCase();
+    }
+
+    private String getUserTitleInput() throws IOException {
+        return reader.readLine().toLowerCase();
     }
 
 }
