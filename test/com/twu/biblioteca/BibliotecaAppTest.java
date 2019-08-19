@@ -24,11 +24,13 @@ public class BibliotecaAppTest {
     private BibliotecaApp appWithTwilightInLibrary;
     private BibliotecaApp appWithMockBook;
     private BibliotecaApp appWithTwoMockBooks;
+    private BibliotecaApp appWithMockMovie;
     private BibliotecaApp appWithRealBibliotecaView;
     private Book beloved;
     private Book mockBook;
     private Book mockBook2;
     private Movie twilight;
+    private Movie mockMovie;
 
     @Before
     public void setUp() {
@@ -70,6 +72,11 @@ public class BibliotecaAppTest {
         ArrayList<Book> stubBookList = new ArrayList<Book>();
         Library libraryWithTwilight = new Library(mockPrintStream, stubBookList, movieListWithTwilight);
         appWithTwilightInLibrary = new BibliotecaApp(libraryWithTwilight, mockBufferedReader,mockBibliotecaAppView);
+
+        ArrayList<Movie> movieListWithMockMovie = new ArrayList<Movie>();
+        mockMovie = mock(Movie.class);
+        Library libraryWithOneMockMovie = new Library(mockPrintStream, stubBookList, movieListWithMockMovie);
+        appWithMockMovie = new BibliotecaApp(libraryWithOneMockMovie, mockBufferedReader, mockBibliotecaAppView);
 
     }
 
@@ -187,7 +194,7 @@ public class BibliotecaAppTest {
 
     // Question: is it better to write a test for the behavior of what the user should interact with (actual text) or mocks (test behavior more)
     @Test
-    public void shouldDisplayErrorMessageIfUserInputsTitleToCheckOutThatIsNotAvailable() throws IOException {
+    public void shouldDisplayErrorMessageIfUserInputsBookTitleToCheckOutThatIsNotAvailable() throws IOException {
         when(mockBufferedReader.readLine()).thenReturn("2").thenReturn("Another Book").thenReturn("q");
         appWithBelovedInLibrary.start();
         verify(mockBibliotecaAppView).displayCheckOutBookNotSuccessful();
@@ -237,5 +244,19 @@ public class BibliotecaAppTest {
         appWithTwilightInLibrary.start();
         assertTrue(twilight.getIsCheckedOut());
         verify(mockBibliotecaAppView).displayCheckOutMovieSuccessful();
+    }
+    @Test
+    public void shouldDisplayErrorMessageIfUserInputsMovieTitleToCheckOutThatIsNotAvailable() throws IOException {
+        when(mockBufferedReader.readLine()).thenReturn("5").thenReturn("Another Movie").thenReturn("q");
+        appWithTwilightInLibrary.start();
+        verify(mockBibliotecaAppView).displayCheckOutMovieNotSuccessful();
+    }
+
+    @Test
+    public void shouldNotCallPrintMovieInPrintMovieListMethodOnBookWhenBookIsCheckedOut() throws IOException {
+        when(mockMovie.getIsCheckedOut()).thenReturn(true);
+        when(mockBufferedReader.readLine()).thenReturn("5").thenReturn("q");
+        appWithMockMovie.start();
+        verify(mockMovie, never()).printMovie(mockPrintStream); // must never be called
     }
 }
