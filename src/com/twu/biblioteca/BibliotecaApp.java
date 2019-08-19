@@ -1,11 +1,7 @@
 package com.twu.biblioteca;
 
-import sun.font.TrueTypeFont;
-
 import java.io.*;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class BibliotecaApp {
 
@@ -90,9 +86,7 @@ public class BibliotecaApp {
                 choice = getUserInput().toLowerCase();
 
             }
-
         }
-
     }
 
     private String getUserInput() throws IOException {

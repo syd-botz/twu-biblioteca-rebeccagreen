@@ -16,14 +16,14 @@ public class Library {
         this.bookList = bookList;
     }
 
-//    public Boolean isTitleInBookList(String bookTitle){
-//        for (Book book: bookList){
-//            if(book.getTitle().toLowerCase().equals(bookTitle)){
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
+    private Book isTitleInBookList(String bookTitle){
+        for (Book book: bookList){
+            if(book.getTitle().toLowerCase().equals(bookTitle)){
+                return book;
+            }
+        }
+        return null;
+    }
 
     public void printBooklist(){
         for (Book book : bookList){
@@ -33,23 +33,20 @@ public class Library {
         }
     }
 
-
     public Boolean checkOut(String bookToCheckOutTitle) {
-        for (Book book : bookList){
-            if (book.getTitle().toLowerCase().equals(bookToCheckOutTitle)){
-                book.checkOutBook();
-                return true;
-            }
+        Book bookToCheckOut = isTitleInBookList(bookToCheckOutTitle);
+        if (bookToCheckOut != null){
+            bookToCheckOut.checkOutBook();
+            return true;
         }
         return false;
     }
 
     public Boolean returnBook(String bookToReturnTitle) {
-        for (Book book : bookList){
-            if (book.getTitle().toLowerCase().equals(bookToReturnTitle)){
-                book.checkInBook();
-                return true;
-            }
+        Book bookToReturn = isTitleInBookList(bookToReturnTitle);
+        if (bookToReturn != null){
+            bookToReturn.checkInBook();
+            return true;
         }
         return false;
     }
