@@ -14,7 +14,8 @@ public class BibliotecaApp {
 
 
 
-    public BibliotecaApp(Library library, OutputStream outputStream, PrintStream printStream, BufferedReader reader, BibliotecaAppView bibliotecaAppView) {
+    public BibliotecaApp(Library library, OutputStream outputStream, PrintStream printStream, BufferedReader reader,
+                         BibliotecaAppView bibliotecaAppView) {
         this.outputStream = outputStream;
         this.library = library;
         this.printStream = printStream;
@@ -54,15 +55,16 @@ public class BibliotecaApp {
             return getUserOptionChoice();
         }
         else if (choice.equals("2")){
-            bibliotecaAppView.displayCheckOutBookInstructions();
-            String bookToCheckOutTitle = getUserTitleInput();
-            Boolean isBookSuccessfullyCheckedOut = library.checkOut(bookToCheckOutTitle);
-            if (isBookSuccessfullyCheckedOut) {
-                bibliotecaAppView.displayCheckOutBookSuccessful();
-            }
-            else {
-                bibliotecaAppView.displayCheckOutBookNotSuccessful();
-            }
+//            bibliotecaAppView.displayCheckOutBookInstructions();
+//            String bookToCheckOutTitle = getUserTitleInput();
+//            Boolean isBookSuccessfullyCheckedOut = library.checkOut(bookToCheckOutTitle);
+//            if (isBookSuccessfullyCheckedOut) {
+//                bibliotecaAppView.displayCheckOutBookSuccessful();
+//            }
+//            else {
+//                bibliotecaAppView.displayCheckOutBookNotSuccessful();
+//            }
+            instructUserToCheckOutBook();
             return getUserOptionChoice();
         }
         else if (choice.equals("3")){
@@ -96,4 +98,15 @@ public class BibliotecaApp {
         return reader.readLine().toLowerCase();
     }
 
+    private void instructUserToCheckOutBook() throws IOException{
+        bibliotecaAppView.displayCheckOutBookInstructions();
+        String bookToCheckOutTitle = getUserTitleInput();
+        Boolean isBookSuccessfullyCheckedOut = library.checkOut(bookToCheckOutTitle);
+        if (isBookSuccessfullyCheckedOut) {
+            bibliotecaAppView.displayCheckOutBookSuccessful();
+        }
+        else {
+            bibliotecaAppView.displayCheckOutBookNotSuccessful();
+        }
+    }
 }
