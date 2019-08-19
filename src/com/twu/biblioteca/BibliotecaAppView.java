@@ -36,4 +36,8 @@ public class BibliotecaAppView {
     public void displayCheckOutBookSuccessful(){
         printStream.println("Thank you! Enjoy the Book!");
     }
+
+    public void displayCheckOutBookNotSuccessful() {
+        printStream.println("Sorry that book is not available.");
+    }
 }

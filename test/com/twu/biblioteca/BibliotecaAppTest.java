@@ -222,7 +222,7 @@ public class BibliotecaAppTest {
     }
 
     @Test
-    public void shouldDisplayErrorMessageIfUserInputsTitleToCheckOutThatIsNotAvailable() throws IOException {
+    public void shouldDisplayConfirmationIfUserSuccessfullyChecksOutBook() throws IOException {
         ArrayList<Book> bookList = new ArrayList<Book>();
         Book beloved = new Book("Beloved", "Toni Morrison", "2010");
         bookList.add(beloved);
@@ -242,7 +242,30 @@ public class BibliotecaAppTest {
         assertThat(output, containsString("Thank you! Enjoy the Book!"));
     }
 
-    // EDIT AFTER ABOVE TEST RUNS
+    // Refactoring Idea: use mock bibliotecaAppView and check if .displayCheckOutNotSuccessful() is called
+    // Question: is it better to write a test for the behavior of what the user should interact with (actual text) or mocks (test behavior more)
+    @Test
+    public void shouldDisplayErrorMessageIfUserInputsTitleToCheckOutThatIsNotAvailable() throws IOException {
+        ArrayList<Book> bookList = new ArrayList<Book>();
+        Book beloved = new Book("Beloved", "Toni Morrison", "2010");
+        bookList.add(beloved);
+
+        BufferedReader bufferedReader = mock(BufferedReader.class);
+        ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
+        PrintStream printStream = new PrintStream(byteOutputStream);
+        BibliotecaAppView bibliotecaAppView = new BibliotecaAppView(printStream);
+        Library lib = new Library(printStream, bookList);
+        BibliotecaApp app = new BibliotecaApp(lib, byteOutputStream, printStream, bufferedReader, bibliotecaAppView);
+
+        when(bufferedReader.readLine()).thenReturn("2").thenReturn("Another Book").thenReturn("q");
+
+        app.start();
+
+        String output = byteOutputStream.toString();
+        assertThat(output, containsString("Sorry that book is not available."));
+
+    }
+        // EDIT AFTER ABOVE TEST RUNS
     @Test
     public void shouldNotCallPrintBookInPrintBookListMethodOnBookWhenBookIsCheckedOut() throws IOException {
         // make app with library with one mock book in it
