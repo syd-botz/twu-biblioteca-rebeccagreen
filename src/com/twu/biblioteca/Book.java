@@ -36,6 +36,10 @@ public class Book {
         this.isCheckedOut = true;
     }
 
+    public void checkInBook() {
+        this.isCheckedOut = false;
+    }
+
 // To Do : Make into Book View Class
     public void printBook(PrintStream printStream){
         printStream.println(this.getTitle() + " " + this.getAuthor() + " in " + this.getYear());

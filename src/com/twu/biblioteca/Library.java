@@ -16,9 +16,13 @@ public class Library {
         this.bookList = bookList;
     }
 
-//    public void showWelcomeMessage(){
-//
-//        printStream.println("welcome to rebecca and syd's library!");
+//    public Boolean isTitleInBookList(String bookTitle){
+//        for (Book book: bookList){
+//            if(book.getTitle().toLowerCase().equals(bookTitle)){
+//                return true;
+//            }
+//        }
+//        return false;
 //    }
 
     public void printBooklist(){
@@ -34,6 +38,16 @@ public class Library {
         for (Book book : bookList){
             if (book.getTitle().toLowerCase().equals(bookToCheckOutTitle)){
                 book.checkOutBook();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Boolean returnBook(String bookToReturnTitle) {
+        for (Book book : bookList){
+            if (book.getTitle().toLowerCase().equals(bookToReturnTitle)){
+                book.checkInBook();
                 return true;
             }
         }

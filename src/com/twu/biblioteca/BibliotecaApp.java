@@ -70,6 +70,13 @@ public class BibliotecaApp {
             }
             if (choice.equals("3")){
                 bibliotecaAppView.displayReturnBookInstructions();
+                String bookToReturnTitle = getUserInput().toLowerCase();
+                Boolean isBookSuccessfullyReturned = library.returnBook(bookToReturnTitle);
+                if (isBookSuccessfullyReturned){
+                    bibliotecaAppView.displayReturnBookSuccessful();
+                }else{
+                    bibliotecaAppView.displayReturnBookNotSuccessful();
+                }
                 bibliotecaAppView.displayOptionMenu();
                 choice = getUserInput().toLowerCase();
             }

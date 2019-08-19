@@ -6,11 +6,11 @@ import org.junit.Test;
 import java.io.*;
 import java.util.ArrayList;
 
+import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.*;
-import static sun.nio.cs.Surrogate.is;
 
 public class BibliotecaAppTest {
     private ByteArrayOutputStream outputStream;
@@ -201,28 +201,10 @@ public class BibliotecaAppTest {
     // QUESTION: should everything that can possibly be a mock be made one?
     // Protocol on writing a test that cannot compile?
     // Should this actually test if the code correctly notifies the user?
+
+    // REFACTOR IDEA: This test is testing exactly the same thing as above test
     @Test
-    public void shouldSetCheckoutToTrueWhenUserTypesBelovedWhenPromptedToCheckOutBook() throws IOException {
-        ArrayList<Book> bookList = new ArrayList<Book>();
-        Book beloved = new Book("Beloved", "Toni Morrison", "2010");
-        bookList.add(beloved);
-
-        BufferedReader bufferedReader = mock(BufferedReader.class);
-        ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
-        PrintStream printStream = new PrintStream(byteOutputStream);
-        BibliotecaAppView bibliotecaAppView = new BibliotecaAppView(printStream);
-        Library lib = new Library(printStream, bookList);
-        BibliotecaApp app = new BibliotecaApp(lib, byteOutputStream, printStream, bufferedReader, bibliotecaAppView);
-
-        when(bufferedReader.readLine()).thenReturn("2").thenReturn("Beloved").thenReturn("q");
-
-        app.start();
-
-       assertTrue(beloved.getIsCheckedOut());
-    }
-
-    @Test
-    public void shouldDisplayConfirmationIfUserSuccessfullyChecksOutBook() throws IOException {
+    public void shouldCheckOutBookWithNotificationToUserIfUserSuccessfullyChecksOutBook() throws IOException {
         ArrayList<Book> bookList = new ArrayList<Book>();
         Book beloved = new Book("Beloved", "Toni Morrison", "2010");
         bookList.add(beloved);
@@ -239,6 +221,8 @@ public class BibliotecaAppTest {
         app.start();
 
         String output = byteOutputStream.toString();
+
+        assertTrue(beloved.getIsCheckedOut());
         assertThat(output, containsString("Thank you! Enjoy the Book!"));
     }
 
@@ -322,5 +306,31 @@ public class BibliotecaAppTest {
 
         String output = byteOutputStream.toString();
         assertThat(output, containsString("Please Enter The Title of the Book To Return: "));
+    }
+    @Test
+    public void shouldReturnBookWithNotificationToUserIfUserSuccessfullyReturnsBook() throws IOException {
+        ArrayList<Book> bookList = new ArrayList<Book>();
+        Book beloved = new Book("Beloved", "Toni Morrison", "2010");
+        beloved.checkOutBook();
+        bookList.add(beloved);
+
+        BufferedReader bufferedReader = mock(BufferedReader.class);
+        ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
+        PrintStream printStream = new PrintStream(byteOutputStream);
+        BibliotecaAppView bibliotecaAppView = new BibliotecaAppView(printStream);
+        Library lib = new Library(printStream, bookList);
+        BibliotecaApp app = new BibliotecaApp(lib, byteOutputStream, printStream, bufferedReader, bibliotecaAppView);
+
+        when(bufferedReader.readLine()).thenReturn("3").thenReturn("Beloved").thenReturn("q");
+
+        app.start();
+
+        String output = byteOutputStream.toString();
+
+        // Successfully returns book
+        assertFalse(beloved.getIsCheckedOut());
+
+        // Successfully Notifies User
+        assertThat(output, containsString("Thank you for returning the book!"));
     }
 }
